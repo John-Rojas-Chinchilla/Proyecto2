@@ -9,7 +9,7 @@ public class DataBase {
     // ----------------------------------------------------------------------------
 
     private static DataBase theInstance;
-    private static final String PROPERTIES_FILE_NAME = "/database.properties";
+    private static final String PROPERTIES_FILE_NAME = "/dataBase.properties";
     Connection cnx;
 
     // Constructores
