@@ -1,14 +1,22 @@
 package chatClient.presentation;
 
 import chatClient.Application;
+import chatClient.presentation.listModel.ListModelItems;
+import chatClient.presentation.listModel.ListaRender;
+import chatClient.presentation.listModel.ListModel;
 import chatProtocol.Message;
 import chatProtocol.User;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Observer;
 
@@ -35,7 +43,19 @@ public class View implements Observer {
     Model model;
     Controller controller;
 
+    private ListaRender listaRender;
+    private ListModel modelo;
+    private ArrayList<String> array;
+
+    // ----------------------------------------------------------------------------
+
     public View() {
+        listaRender = new ListaRender();
+        array = new ArrayList<>();
+        modelo = new ListModel();
+        contactos.setModel(modelo);
+        contactos.setCellRenderer(listaRender);
+
         loginPanel.setVisible(true);
         Application.window.getRootPane().setDefaultButton(login);
         bodyPanel.setVisible(false);
@@ -110,7 +130,27 @@ public class View implements Observer {
                 }
             }
         });
+        contactoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    contactoField.setBackground(Color.white);
+                    if(Objects.equals(contactoField.getText(), "")) {
+                        throw new Exception("NOMBRE INVALIDO");
+                    }
+                    array.add(contactoField.getText());
+                    modelo.add(new ListModelItems(array.get(array.size() - 1), new ImageIcon(generateIcon(String.valueOf(contactoField.getText().charAt(0))))));
+                    contactoField.setText("");
+                }
+                catch (Exception ex) {
+                    contactoField.setBackground(Color.orange);
+                    JOptionPane.showMessageDialog(panel, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
     }
+
+    // ----------------------------------------------------------------------------
 
     public void setModel(Model model) {
         this.model = model;
@@ -124,6 +164,54 @@ public class View implements Observer {
     public JPanel getPanel() {
         return panel;
     }
+
+    // ----------------------------------------------------------------------------
+
+    String generateIcon(String letra) throws IOException {
+        BufferedImage b = new BufferedImage(50,50,BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = b.createGraphics();
+
+        // fill all the image with white
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0, 0, 50, 50);
+
+        // create a circle with black
+        int x = (int)(Math.random()*6+1);
+        switch (x) {
+            case 1:
+                g2d.setColor(Color.CYAN);
+                break;
+            case 2:
+                g2d.setColor(Color.GREEN);
+                break;
+            case 3:
+                g2d.setColor(Color.PINK);
+                break;
+            case 4:
+                g2d.setColor(Color.BLUE);
+                break;
+            case 5:
+                g2d.setColor(Color.YELLOW);
+                break;
+            case 6:
+                g2d.setColor(Color.ORANGE);
+                break;
+        }
+        g2d.fillOval(0, 0, 50, 50);
+
+        // create a string with yellow
+        g2d.setColor(Color.BLACK);
+        g2d.drawString(letra, 22, 29);
+
+        // Disposes of this graphics context and releases any system resources that it is using.
+        g2d.dispose();
+
+        File f = new File("image" +  array.size() + ".png");
+        ImageIO.write(b, "png", f);
+        return f.getPath();
+    }
+
+    // ----------------------------------------------------------------------------
 
     String backStyle = "margin:0px; background-color:#e6e6e6;";
     String senderStyle = "background-color:#c2f0c2;margin-left:30px; margin-right:5px;margin-top:3px; padding:2px; border-radius: 25px;";
