@@ -21,7 +21,7 @@ public class Application {
         View view = new View();
         Controller controller = new Controller(view, model);
         window.setSize(600,400);
-        window.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setTitle("CHAT");
         try {
             window.setIconImage((new ImageIcon(Application.class.getResource("/logo.png"))).getImage());

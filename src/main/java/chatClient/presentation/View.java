@@ -133,11 +133,13 @@ public class View implements Observer {
 
         int prop = (int) properties;
         if (model.getCurrentUser() == null) {
+            Application.window.setSize(600,400);
             Application.window.setTitle("CHAT");
             loginPanel.setVisible(true);
             Application.window.getRootPane().setDefaultButton(login);
             bodyPanel.setVisible(false);
         } else {
+            Application.window.setSize(700,400);
             Application.window.setTitle(model.getCurrentUser().getNombre().toUpperCase());
             loginPanel.setVisible(false);
             bodyPanel.setVisible(true);

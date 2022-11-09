@@ -38,6 +38,9 @@ public class Service implements IService {
     }
 
     public void register(User u) throws Exception {
+        if (usuarioDao.read(u.getNombre()) != null) {
+            throw new Exception("USUARIO YA REGISTRADO");
+        }
         usuarioDao.create(u);
     }
 }
