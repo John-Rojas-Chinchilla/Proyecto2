@@ -53,4 +53,6 @@ public class Controller {
     public void register(User u) throws Exception {
         ServiceProxy.instance().register(u);
     }
+
+
 }

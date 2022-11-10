@@ -143,12 +143,12 @@
               <text value="Logout"/>
             </properties>
           </component>
-          <component id="88e63" class="javax.swing.JLabel" binding="contacoLabel">
+          <component id="88e63" class="javax.swing.JLabel" binding="contactoLabel">
             <constraints>
               <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Label"/>
+              <text value="Chat"/>
             </properties>
           </component>
           <grid id="18eed" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">

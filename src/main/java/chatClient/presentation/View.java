@@ -40,7 +40,7 @@ public class View implements Observer {
     private JButton contactoButton;
     private JTextField contactoField;
     private JList contactos;
-    private JLabel contacoLabel;
+    private JLabel contactoLabel;
 
     Model model;
     Controller controller;
@@ -153,8 +153,12 @@ public class View implements Observer {
         contactos.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                if(e.getClickCount() == 1) {
-                    JOptionPane.showMessageDialog(panel, "DESARROLLAR");
+                if(e.getClickCount() == 1 && array.size() > 0) {
+                    contactoLabel.setText(array.get(contactos.getSelectedIndex()));
+                    contactoLabel.setIcon(new ImageIcon("image" + (contactos.getSelectedIndex() + 1) + ".png"));
+                }
+                else if (array.size() == 0) {
+                    JOptionPane.showMessageDialog(panel, "NO HAY CONTACTOS", "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -253,6 +257,9 @@ public class View implements Observer {
                      }
                 }
                 this.messages.setText(text);
+            }
+            if((prop & Model.CONTACTOS) == Model.CONTACTOS) {
+
             }
             this.mensaje.setText("");
         }
