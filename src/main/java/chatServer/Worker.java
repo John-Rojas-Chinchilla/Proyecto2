@@ -68,7 +68,21 @@ public class Worker {
                         System.out.println(user.getNombre()+": "+message.getMessage());
                     } catch (ClassNotFoundException ex) {
                     }
-                    break;                     
+                    break;
+                    case Protocol.CONTACT:
+                        try {
+                            User u = service.checkContact((String)in.readObject());
+                            out.writeInt(Protocol.CONTACT_RESPONSE);
+                            out.writeInt(Protocol.ERROR_NO_ERROR);
+                            out.writeObject(u);
+                            out.flush();
+                        }
+                        catch (Exception e) {
+                            out.writeInt(Protocol.CONTACT_RESPONSE);
+                            out.writeInt(Protocol.ERROR_CONTACT);
+                            out.flush();
+                        }
+                        break;
                 }
                 out.flush();
             } catch (IOException  ex) {

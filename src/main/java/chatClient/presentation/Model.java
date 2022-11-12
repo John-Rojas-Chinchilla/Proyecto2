@@ -18,7 +18,7 @@ public class Model extends java.util.Observable {
 
     User currentUser;
     List<Message> messages;
-    ArrayList<String> contactos;
+    List<User> contactos;
 
     // Constructor
     // ----------------------------------------------------------------------------
@@ -26,6 +26,7 @@ public class Model extends java.util.Observable {
     public Model() {
        currentUser = null;
        messages= new ArrayList<>();
+       contactos = new ArrayList<>();
     }
 
     // Getters And Setters
@@ -47,11 +48,11 @@ public class Model extends java.util.Observable {
         this.messages = messages;
     }
 
-    public ArrayList<String> getContactos() {
+    public List<User> getContactos() {
         return contactos;
     }
 
-    public void setContactos(ArrayList<String> contactos) {
+    public void setContactos(List<User> contactos) {
         this.contactos = contactos;
     }
 
@@ -73,5 +74,4 @@ public class Model extends java.util.Observable {
     
     public static final int USER = 1;
     public static final int CHAT = 2;
-    public static final int CONTACTOS = 3;
 }

@@ -1,9 +1,11 @@
 package chatClient.presentation;
 
 import chatClient.logic.ServiceProxy;
+import chatClient.presentation.listModel.ListModelItems;
 import chatProtocol.Message;
 import chatProtocol.User;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class Controller {
@@ -54,5 +56,20 @@ public class Controller {
         ServiceProxy.instance().register(u);
     }
 
+    public User checkContact(String id) throws Exception {
+        return ServiceProxy.instance().checkContact(id);
+    }
 
+    public void addContact(User user) {
+        try {
+            model.getContactos().add(user);
+            view.modelo.add(new ListModelItems(model.getContactos().get(model.getContactos().size() - 1).getNombre(), new ImageIcon(view.generateIcon(String.valueOf(user.getNombre().charAt(0))))));
+            model.commit(Model.USER + Model.CHAT);
+        }
+        catch (Exception ex) {}
+    }
+
+    public void contactError(String message) {
+        view.errorContactPane(message);
+    }
 }

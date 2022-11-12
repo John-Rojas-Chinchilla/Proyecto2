@@ -44,16 +44,13 @@ public class View implements Observer {
 
     Model model;
     Controller controller;
-
-    private ListaRender listaRender;
-    private ListModel modelo;
-    private ArrayList<String> array;
+    ListaRender listaRender;
+    ListModel modelo;
 
     // ----------------------------------------------------------------------------
 
     public View() {
         listaRender = new ListaRender();
-        array = new ArrayList<>();
         modelo = new ListModel();
         contactos.setModel(modelo);
         contactos.setCellRenderer(listaRender);
@@ -140,8 +137,7 @@ public class View implements Observer {
                     if(Objects.equals(contactoField.getText(), "")) {
                         throw new Exception("NOMBRE INVALIDO");
                     }
-                    array.add(contactoField.getText());
-                    modelo.add(new ListModelItems(array.get(array.size() - 1), new ImageIcon(generateIcon(String.valueOf(contactoField.getText().charAt(0))))));
+                    controller.checkContact(contactoField.getText());
                     contactoField.setText("");
                 }
                 catch (Exception ex) {
@@ -153,12 +149,9 @@ public class View implements Observer {
         contactos.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                if(e.getClickCount() == 1 && array.size() > 0) {
-                    contactoLabel.setText(array.get(contactos.getSelectedIndex()));
+                if(e.getClickCount() == 1 && model.getContactos().size() > 0) {
+                    contactoLabel.setText(model.getContactos().get(contactos.getSelectedIndex()).getNombre());
                     contactoLabel.setIcon(new ImageIcon("image" + (contactos.getSelectedIndex() + 1) + ".png"));
-                }
-                else if (array.size() == 0) {
-                    JOptionPane.showMessageDialog(panel, "NO HAY CONTACTOS", "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -220,7 +213,7 @@ public class View implements Observer {
         // Disposes of this graphics context and releases any system resources that it is using.
         g2d.dispose();
 
-        File f = new File("image" +  array.size() + ".png");
+        File f = new File("image" +  model.getContactos().size() + ".png");
         ImageIO.write(b, "png", f);
         return f.getPath();
     }
@@ -258,12 +251,12 @@ public class View implements Observer {
                 }
                 this.messages.setText(text);
             }
-            if((prop & Model.CONTACTOS) == Model.CONTACTOS) {
-
-            }
             this.mensaje.setText("");
         }
         panel.validate();
     }
 
+    public void errorContactPane(String message) {
+        JOptionPane.showMessageDialog(panel, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+    }
 }

@@ -43,4 +43,11 @@ public class Service implements IService {
         }
         usuarioDao.create(u);
     }
+
+    public User checkContact(String id) throws Exception {
+        if (usuarioDao.read(id) == null) {
+            throw new Exception("USUARIO NO REGISTRADO");
+        }
+        return usuarioDao.read(id);
+    }
 }

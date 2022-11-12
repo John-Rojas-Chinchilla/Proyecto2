@@ -122,6 +122,18 @@ public class ServiceProxy implements IService {
         }
     }
 
+    public User checkContact(String id) throws Exception {
+        try {
+            out.writeInt(Protocol.CONTACT);
+            out.writeObject(id);
+            out.flush();
+            return null;
+        }
+        catch (IOException ex) {
+            return null;
+        }
+    }
+
     // LISTENING FUNCTIONS
     // ----------------------------------------------------------------------------
 
@@ -147,12 +159,27 @@ public class ServiceProxy implements IService {
                 System.out.println("DELIVERY");
                 System.out.println("Operacion: "+method);
                 switch(method){
-                case Protocol.DELIVER:
-                    try {
-                        Message message=(Message)in.readObject();
-                        deliver(message);
-                    } catch (ClassNotFoundException ex) {}
-                    break;
+                    case Protocol.DELIVER:
+                        try {
+                            Message message=(Message)in.readObject();
+                            deliver(message);
+                        }
+                        catch (ClassNotFoundException ex) {}
+                        break;
+                    case Protocol.CONTACT_RESPONSE:
+                        try {
+                            int error = in.readInt();
+                            if (error == Protocol.ERROR_NO_ERROR) {
+                                User u = (User) in.readObject();
+                                contactDeliver(u);
+                            }
+                            else if (error == Protocol.ERROR_CONTACT) {
+                                controller.contactError("USUARIO NO EXISTE");
+                            }
+                        }
+                        catch (Exception ex) {
+                        }
+                        break;
                 }
                 out.flush();
             } catch (IOException  ex) {
@@ -169,4 +196,13 @@ public class ServiceProxy implements IService {
          }
       );
    }
+
+    private void contactDeliver( final User user ){
+        SwingUtilities.invokeLater(new Runnable(){
+            public void run(){
+                controller.addContact(user);
+            }
+        }
+        );
+    }
 }
