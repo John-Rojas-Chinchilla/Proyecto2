@@ -46,7 +46,7 @@ public class UsuarioDao {
         if (rs.next()) {
             return from(rs, "u");
         } else {
-            throw new Exception("USER NO EXISTE");
+            return null;
         }
     }
 
