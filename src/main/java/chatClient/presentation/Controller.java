@@ -79,6 +79,7 @@ public class Controller {
     public void addContact(User user) {
         try {
             model.getContactos().add(user);
+            model.getCurrentUser().getContactos().add(user);
             view.modelo.add(new ListModelItem(model.getContactos().get(model.getContactos().size() - 1).getNombre(), new ImageIcon(view.generateIcon(String.valueOf(user.getNombre().charAt(0))))));
             model.commit(Model.USER + Model.CHAT);
         }
@@ -87,5 +88,11 @@ public class Controller {
 
     public void contactError(String message) {
         view.errorContactPane(message);
+    }
+
+    public void contactSearch(String nombre) throws IOException {
+        model.setContactos(model.getCurrentUser().contactosSearch(nombre));
+        view.modelo.add(new ListModelItem(model.getContactos().get(model.getContactos().size() - 1).getNombre(), new ImageIcon(view.generateIcon(String.valueOf(nombre.charAt(0))))));
+        model.commit(Model.USER + Model.CHAT);
     }
 }

@@ -134,6 +134,9 @@ public class View implements Observer {
                     if(Objects.equals(contactoField.getText(), "") || Objects.equals(contactoField.getText(), model.getCurrentUser().getNombre())) {
                         throw new Exception("USUARIO INVALIDO");
                     }
+                    else if (model.getCurrentUser().existContact(contactoField.getText())) {
+                        throw new Exception("CONTACTO YA AGREGADO");
+                    }
                     controller.checkContact(contactoField.getText());
                     contactoField.setText("");
                 }
@@ -149,6 +152,16 @@ public class View implements Observer {
                 if(e.getClickCount() == 1 && model.getContactos().size() > 0) {
                     contactoLabel.setText(model.getContactos().get(contactos.getSelectedIndex()).getNombre());
                     contactoLabel.setIcon(new ImageIcon("image" + (contactos.getSelectedIndex() + 1) + ".png"));
+                }
+            }
+        });
+        buscarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    controller.contactSearch(buscarField.getText());
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
             }
         });
@@ -261,6 +274,6 @@ public class View implements Observer {
         modelo = new ListModel();
         listaRender = new ListaRender();
         contactos.setModel(modelo);
-        contactos.setCellRenderer(new ListaRender());
+        contactos.setCellRenderer(listaRender);
     }
 }

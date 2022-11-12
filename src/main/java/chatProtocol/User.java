@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class User implements Serializable {
 
@@ -14,6 +15,8 @@ public class User implements Serializable {
     String clave;
     String nombre;
 
+    List<User> contactos;
+
     // Constructores
     // ----------------------------------------------------------------------------
 
@@ -21,12 +24,14 @@ public class User implements Serializable {
         this.id = "";
         this.clave = "";
         this.nombre = "";
+        this.contactos = new ArrayList<>();
     }
 
     public User(String id, String clave, String nombre) {
         this.id = id;
         this.clave = clave;
         this.nombre = nombre;
+        this.contactos = new ArrayList<>();
     }
 
     // Getters and Setters
@@ -56,6 +61,18 @@ public class User implements Serializable {
         this.nombre = nombre;
     }
 
+    public List<User> getContactos() {
+        return contactos;
+    }
+
+    public void setContactos(List<User> contactos) {
+        this.contactos = contactos;
+    }
+
+    public List<User> contactosSearch(String filtro) {
+        return contactos.stream().filter(e->e.getNombre().contains(filtro)).collect(Collectors.toList());
+    }
+
     // Métodos Específicos
     // ----------------------------------------------------------------------------
 
@@ -82,6 +99,15 @@ public class User implements Serializable {
             return false;
         }
         return true;
+    }
+
+    public boolean existContact(String nombre) {
+        for (User contacto : contactos) {
+            if (Objects.equals(contacto.getNombre(), nombre)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
