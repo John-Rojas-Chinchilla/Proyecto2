@@ -32,11 +32,11 @@ public class Controller {
         model.commit(Model.USER);
     }
 
-    public void post(String text){
+    public void post(String text, User receiver){
         Message message = new Message();
         message.setMessage(text);
         message.setSender(model.getCurrentUser());
-        ServiceProxy.instance().post(message);
+        ServiceProxy.instance().post(message, receiver);
         model.commit(Model.CHAT);
     }
 
@@ -91,8 +91,6 @@ public class Controller {
     }
 
     public void contactSearch(String nombre) throws IOException {
-        model.setContactos(model.getCurrentUser().contactosSearch(nombre));
-        view.modelo.add(new ListModelItem(model.getContactos().get(model.getContactos().size() - 1).getNombre(), new ImageIcon(view.generateIcon(String.valueOf(nombre.charAt(0))))));
-        model.commit(Model.USER + Model.CHAT);
+
     }
 }

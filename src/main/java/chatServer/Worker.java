@@ -16,6 +16,7 @@ public class Worker {
     User user;
     boolean continuar;
 
+
     public Worker(Server srv, ObjectInputStream in, ObjectOutputStream out, User user, IService service) {
         this.srv=srv;
         this.in=in;
@@ -63,7 +64,7 @@ public class Worker {
                     try {
                         message = (Message)in.readObject();
                         message.setSender(user);
-                        srv.deliver(message);
+                        srv.deliver(message, (User)in.readObject());
                         //service.post(message); // if wants to save messages, ex. recivier no logged on
                         System.out.println(user.getNombre()+": "+message.getMessage());
                     } catch (ClassNotFoundException ex) {

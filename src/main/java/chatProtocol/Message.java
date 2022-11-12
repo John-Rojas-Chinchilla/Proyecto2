@@ -10,15 +10,21 @@ public class Message implements Serializable{
     User sender;
     String message;
 
+    User receiver;
+
     // Constructores
     // ----------------------------------------------------------------------------
 
     public Message() {
+        this.sender = null;
+        this.message = "";
+        this.receiver = null;
     }
 
-    public Message(User sedner,String message) {
-        this.sender = sedner;
+    public Message(User sender, String message, User receiver) {
+        this.sender = sender;
         this.message = message;
+        this.receiver = receiver;
     }
 
     // Getters and Setters
@@ -39,5 +45,12 @@ public class Message implements Serializable{
     public void setMessage(String message) {
         this.message = message;
     }
-    
+
+    public User getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(User receiver) {
+        this.receiver = receiver;
+    }
 }

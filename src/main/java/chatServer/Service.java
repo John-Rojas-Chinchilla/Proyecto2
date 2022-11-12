@@ -25,7 +25,7 @@ public class Service implements IService {
     // Métodos Específicos
     // ----------------------------------------------------------------------------
 
-    public void post(Message m){
+    public void post(Message m, User r){
         // if wants to save messages, ex. recivier no logged on
     }
 

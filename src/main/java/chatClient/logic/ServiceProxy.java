@@ -98,10 +98,11 @@ public class ServiceProxy implements IService {
         this.disconnect();
     }
     
-    public void post(Message message){
+    public void post(Message message, User receiver){
         try {
             out.writeInt(Protocol.POST);
             out.writeObject(message);
+            out.writeObject(receiver);
             out.flush();
         } catch (IOException ex) {
         }   
@@ -161,7 +162,7 @@ public class ServiceProxy implements IService {
                 switch(method){
                     case Protocol.DELIVER:
                         try {
-                            Message message=(Message)in.readObject();
+                            Message message = (Message)in.readObject();
                             deliver(message);
                         }
                         catch (ClassNotFoundException ex) {}

@@ -93,7 +93,8 @@ public class View implements Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String text = mensaje.getText();
-                controller.post(text);
+                User receiver = model.getContactos().get(contactos.getSelectedIndex());
+                controller.post(text, receiver);
             }
         });
         registrarButton.addActionListener(new ActionListener() {
@@ -158,11 +159,7 @@ public class View implements Observer {
         buscarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    controller.contactSearch(buscarField.getText());
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
-                }
+
             }
         });
     }

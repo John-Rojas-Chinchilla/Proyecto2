@@ -13,6 +13,7 @@ import chatProtocol.User;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collections;
+import java.util.Objects;
 
 public class Server {
     ServerSocket srv;
@@ -98,9 +99,11 @@ public class Server {
         return user;
     }
     
-    public void deliver(Message message){
+    public void deliver(Message message, User receiver){
         for(Worker wk:workers){
-            wk.deliver(message);
+            if (Objects.equals(wk.user.getId(), receiver.getId())){
+                wk.deliver(message);
+            }
         }        
     } 
     
