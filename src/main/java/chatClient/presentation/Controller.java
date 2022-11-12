@@ -1,11 +1,15 @@
 package chatClient.presentation;
 
 import chatClient.logic.ServiceProxy;
-import chatClient.presentation.listModel.ListModelItems;
+import chatClient.presentation.listModel.ListModelItem;
 import chatProtocol.Message;
 import chatProtocol.User;
 
 import javax.swing.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class Controller {
@@ -39,11 +43,23 @@ public class Controller {
     public void logout(){
         try {
             ServiceProxy.instance().logout(model.getCurrentUser());
+            for (int i = 1; i < model.getContactos().size() + 1; i++) {
+                String fileName = "image" + i + ".png";
+                Path path = Paths.get(fileName);
+                try {
+                    Files.delete(path);
+                }
+                catch (IOException ex) {
+                    throw new Exception("ERROR");
+                }
+            }
             model.setMessages(new ArrayList<>());
+            model.setContactos(new ArrayList<>());
             model.commit(Model.CHAT);
         } catch (Exception ex) {
         }
         model.setCurrentUser(null);
+        view.initList();
         model.commit(Model.USER+Model.CHAT);
     }
         
@@ -63,7 +79,7 @@ public class Controller {
     public void addContact(User user) {
         try {
             model.getContactos().add(user);
-            view.modelo.add(new ListModelItems(model.getContactos().get(model.getContactos().size() - 1).getNombre(), new ImageIcon(view.generateIcon(String.valueOf(user.getNombre().charAt(0))))));
+            view.modelo.add(new ListModelItem(model.getContactos().get(model.getContactos().size() - 1).getNombre(), new ImageIcon(view.generateIcon(String.valueOf(user.getNombre().charAt(0))))));
             model.commit(Model.USER + Model.CHAT);
         }
         catch (Exception ex) {}

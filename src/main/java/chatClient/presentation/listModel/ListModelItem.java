@@ -2,11 +2,11 @@ package chatClient.presentation.listModel;
 
 import javax.swing.*;
 
-public class ListModelItems {
+public class ListModelItem {
     private String text;
     private ImageIcon icon;
 
-    public ListModelItems(String text, ImageIcon icon) {
+    public ListModelItem(String text, ImageIcon icon) {
         super();
         this.text = text;
         this.icon = icon;

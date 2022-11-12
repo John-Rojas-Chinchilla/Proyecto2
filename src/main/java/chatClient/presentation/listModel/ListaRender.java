@@ -10,7 +10,7 @@ public class ListaRender extends JLabel implements ListCellRenderer {
 
     @Override
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-        ListModelItems item = (ListModelItems) value;
+        ListModelItem item = (ListModelItem) value;
         this.setText(item.getText());
         this.setIcon(item.getIcon());
 

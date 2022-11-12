@@ -1,7 +1,6 @@
 package chatClient.presentation;
 
 import chatClient.Application;
-import chatClient.presentation.listModel.ListModelItems;
 import chatClient.presentation.listModel.ListaRender;
 import chatClient.presentation.listModel.ListModel;
 import chatProtocol.Message;
@@ -18,7 +17,6 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Observer;
 
@@ -50,10 +48,7 @@ public class View implements Observer {
     // ----------------------------------------------------------------------------
 
     public View() {
-        listaRender = new ListaRender();
-        modelo = new ListModel();
-        contactos.setModel(modelo);
-        contactos.setCellRenderer(listaRender);
+        initList();
 
         loginPanel.setVisible(true);
         Application.window.getRootPane().setDefaultButton(login);
@@ -84,6 +79,8 @@ public class View implements Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.logout();
+                contactoLabel.setText("Chat");
+                contactoLabel.setIcon(new ImageIcon());
             }
         });
         finish.addActionListener(new ActionListener() {
@@ -134,8 +131,8 @@ public class View implements Observer {
             public void actionPerformed(ActionEvent e) {
                 try {
                     contactoField.setBackground(Color.white);
-                    if(Objects.equals(contactoField.getText(), "")) {
-                        throw new Exception("NOMBRE INVALIDO");
+                    if(Objects.equals(contactoField.getText(), "") || Objects.equals(contactoField.getText(), model.getCurrentUser().getNombre())) {
+                        throw new Exception("USUARIO INVALIDO");
                     }
                     controller.checkContact(contactoField.getText());
                     contactoField.setText("");
@@ -258,5 +255,12 @@ public class View implements Observer {
 
     public void errorContactPane(String message) {
         JOptionPane.showMessageDialog(panel, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void initList() {
+        modelo = new ListModel();
+        listaRender = new ListaRender();
+        contactos.setModel(modelo);
+        contactos.setCellRenderer(new ListaRender());
     }
 }
