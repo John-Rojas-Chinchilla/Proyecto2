@@ -93,9 +93,14 @@ public class View implements Observer {
         post.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String text = mensaje.getText();
-                User receiver = model.getContactos().get(contactos.getSelectedIndex());
-                controller.post(text, receiver);
+                try {
+                    String text = mensaje.getText();
+                    User receiver = model.getContactos().get(contactos.getSelectedIndex());
+                    controller.post(text, receiver);
+                }
+                catch (Exception ex) {
+                    JOptionPane.showMessageDialog(panel, "USUARIO NO ENCONTRADO", "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         registrarButton.addActionListener(new ActionListener() {
@@ -254,10 +259,10 @@ public class View implements Observer {
                 String text = "";
                 for (Message m : model.getMessages()) {
                     if (m.getSender().equals(model.getCurrentUser())) {
-                        text += ("Me:" + m.getMessage() + "\n");
-                    } else {
+                        text += ("Me: " + m.getMessage() + "\n");
+                    } else if (m.getSender().equals(model.getContactos().get(contactos.getSelectedIndex()))) {
                         text += (m.getSender().getNombre() + ": " + m.getMessage() + "\n");
-                     }
+                    }
                 }
                 this.messages.setText(text);
             }
