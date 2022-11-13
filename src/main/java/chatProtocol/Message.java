@@ -8,9 +8,8 @@ public class Message implements Serializable{
     // ----------------------------------------------------------------------------
 
     User sender;
-    String message;
-
     User receiver;
+    String message;
 
     // Constructores
     // ----------------------------------------------------------------------------

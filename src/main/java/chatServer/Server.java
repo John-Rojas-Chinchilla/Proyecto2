@@ -99,9 +99,9 @@ public class Server {
         return user;
     }
     
-    public void deliver(Message message, User receiver){
+    public void deliver(Message message, User receiver, User sender){
         for(Worker wk:workers){
-            if (Objects.equals(wk.user.getId(), receiver.getId())){
+            if (Objects.equals(wk.user.getId(), receiver.getId()) || Objects.equals(wk.user.getId(), sender.getId())){
                 wk.deliver(message);
             }
         }        

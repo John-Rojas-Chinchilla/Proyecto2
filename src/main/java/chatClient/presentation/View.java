@@ -17,6 +17,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Observer;
 
@@ -153,6 +154,8 @@ public class View implements Observer {
                 if(e.getClickCount() == 1 && model.getContactos().size() > 0) {
                     contactoLabel.setText(model.getContactos().get(contactos.getSelectedIndex()).getNombre());
                     contactoLabel.setIcon(new ImageIcon("image" + (contactos.getSelectedIndex() + 1) + ".png"));
+                    model.setMessages(model.getCurrentUser().getChatWith(model.getContactos().get(contactos.getSelectedIndex())));
+                    model.commit(Model.USER+Model.CHAT);
                 }
             }
         });

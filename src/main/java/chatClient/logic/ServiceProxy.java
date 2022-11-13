@@ -98,11 +98,12 @@ public class ServiceProxy implements IService {
         this.disconnect();
     }
     
-    public void post(Message message, User receiver){
+    public void post(Message message, User receiver, User sender){
         try {
             out.writeInt(Protocol.POST);
             out.writeObject(message);
             out.writeObject(receiver);
+            out.writeObject(sender);
             out.flush();
         } catch (IOException ex) {
         }   
@@ -158,7 +159,7 @@ public class ServiceProxy implements IService {
             try {
                 method = in.readInt();
                 System.out.println("DELIVERY");
-                System.out.println("Operacion: "+method);
+                System.out.println("Operacion: " + method);
                 switch(method){
                     case Protocol.DELIVER:
                         try {

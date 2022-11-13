@@ -25,7 +25,7 @@ public class Service implements IService {
     // Métodos Específicos
     // ----------------------------------------------------------------------------
 
-    public void post(Message m, User r){
+    public void post(Message m, User r, User s){
         // if wants to save messages, ex. recivier no logged on
     }
 
@@ -34,7 +34,7 @@ public class Service implements IService {
     } 
 
     public void logout(User p) throws Exception{
-        //nothing to do
+        // nothing to do
     }
 
     public void register(User u) throws Exception {

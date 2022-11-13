@@ -33,10 +33,13 @@ public class Controller {
     }
 
     public void post(String text, User receiver){
+        User sender = model.getCurrentUser();
         Message message = new Message();
         message.setMessage(text);
         message.setSender(model.getCurrentUser());
-        ServiceProxy.instance().post(message, receiver);
+        message.setReceiver(receiver);
+        sender.getChats().add(message);
+        ServiceProxy.instance().post(message, receiver, sender);
         model.commit(Model.CHAT);
     }
 
@@ -93,4 +96,6 @@ public class Controller {
     public void contactSearch(String nombre) throws IOException {
 
     }
+
+
 }

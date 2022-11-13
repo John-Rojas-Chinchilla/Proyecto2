@@ -14,8 +14,8 @@ public class User implements Serializable {
     String id;
     String clave;
     String nombre;
-
     List<User> contactos;
+    List<Message> chats;
 
     // Constructores
     // ----------------------------------------------------------------------------
@@ -25,6 +25,7 @@ public class User implements Serializable {
         this.clave = "";
         this.nombre = "";
         this.contactos = new ArrayList<>();
+        this.chats = new ArrayList<>();
     }
 
     public User(String id, String clave, String nombre) {
@@ -32,6 +33,7 @@ public class User implements Serializable {
         this.clave = clave;
         this.nombre = nombre;
         this.contactos = new ArrayList<>();
+        this.chats = new ArrayList<>();
     }
 
     // Getters and Setters
@@ -73,6 +75,14 @@ public class User implements Serializable {
         return contactos.stream().filter(e->e.getNombre().contains(filtro)).collect(Collectors.toList());
     }
 
+    public List<Message> getChats() {
+        return chats;
+    }
+
+    public void setChats(List<Message> chats) {
+        this.chats = chats;
+    }
+
     // Métodos Específicos
     // ----------------------------------------------------------------------------
 
@@ -110,4 +120,13 @@ public class User implements Serializable {
         return false;
     }
 
+    public List<Message> getChatWith(User s) {
+        List chatWith = new ArrayList();
+        for(Message ms : chats) {
+            if (Objects.equals(ms.getReceiver().getId(), s.getId())) {
+                chatWith.add(ms);
+            }
+        }
+        return chatWith;
+    }
 }
