@@ -1,4 +1,4 @@
-package program.data;
+package chatServer.data;
 
 import chatServer.data.Data;
 import jakarta.xml.bind.JAXBContext;
@@ -18,7 +18,7 @@ public class XmlPersister {
         path = p;
     }
 
-    public static XmlPersister instance(){
+    public static XmlPersister instance() {
         if (theInstance == null){
             theInstance = new XmlPersister("UsersData.xml");
         }

@@ -5,6 +5,7 @@ import chatProtocol.IService;
 import chatProtocol.Message;
 import chatServer.data.Data;
 import chatServer.data.UsuarioDao;
+import chatServer.data.XmlPersister;
 
 import java.util.Objects;
 
@@ -22,7 +23,7 @@ public class Service implements IService {
 
     private Service() {
         try {
-            data = program.data.XmlPersister.instance().load();
+            data = XmlPersister.instance().load();
         }
         catch (Exception e) {
             data = new Data();
@@ -80,7 +81,7 @@ public class Service implements IService {
 
     public void store() {
         try {
-            program.data.XmlPersister.instance().store(data);
+            XmlPersister.instance().store(data);
         }
         catch (Exception e) {
             System.out.println(e);

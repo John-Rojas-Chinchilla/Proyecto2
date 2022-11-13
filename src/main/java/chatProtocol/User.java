@@ -20,7 +20,6 @@ public class User implements Serializable {
     String id;
     String clave;
     String nombre;
-    @XmlIDREF
     List<User> contactos;
     List<Message> chats;
 
