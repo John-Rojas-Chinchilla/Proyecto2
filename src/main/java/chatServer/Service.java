@@ -45,7 +45,9 @@ public class Service implements IService {
     }
 
     public User login(User p) throws Exception {
-        return usuarioDao.read(p.getId());
+        User u = usuarioDao.read(p.getId());
+        data.getUsers().add(u);
+        return u;
     } 
 
     public void logout(User p) throws Exception{
