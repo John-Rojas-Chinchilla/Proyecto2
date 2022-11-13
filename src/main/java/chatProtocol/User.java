@@ -123,7 +123,7 @@ public class User implements Serializable {
     public List<Message> getChatWith(User s) {
         List chatWith = new ArrayList();
         for(Message ms : chats) {
-            if (Objects.equals(ms.getReceiver().getId(), s.getId())) {
+            if ((Objects.equals(ms.getReceiver().getId(), s.getId()) && Objects.equals(ms.getSender().getId(), this.getId())) ||(Objects.equals(ms.getReceiver().getId(), this.getId())) && Objects.equals(ms.getSender().getId(), s.getId())) {
                 chatWith.add(ms);
             }
         }

@@ -34,11 +34,7 @@ public class Controller {
 
     public void post(String text, User receiver){
         User sender = model.getCurrentUser();
-        Message message = new Message();
-        message.setMessage(text);
-        message.setSender(model.getCurrentUser());
-        message.setReceiver(receiver);
-        sender.getChats().add(message);
+        Message message = new Message(sender, text, receiver);
         ServiceProxy.instance().post(message, receiver, sender);
         model.commit(Model.CHAT);
     }
@@ -68,7 +64,8 @@ public class Controller {
         
     public void deliver(Message message){
         model.messages.add(message);
-        model.commit(Model.CHAT);       
+        model.getCurrentUser().getChats().add(message);
+        model.commit(Model.CHAT);
     }
 
     public void register(User u) throws Exception {
@@ -94,7 +91,6 @@ public class Controller {
     }
 
     public void contactSearch(String nombre) throws IOException {
-
     }
 
 

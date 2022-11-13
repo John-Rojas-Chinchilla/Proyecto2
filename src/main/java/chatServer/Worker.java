@@ -60,10 +60,9 @@ public class Worker {
                     stop();
                     break;                 
                 case Protocol.POST:
-                    Message message = null;
+                    Message message;
                     try {
                         message = (Message)in.readObject();
-                        message.setSender(user);
                         srv.deliver(message, (User)in.readObject(), (User)in.readObject());
                         //service.post(message); // if wants to save messages, ex. recivier no logged on
                         System.out.println(user.getNombre()+": "+message.getMessage());
