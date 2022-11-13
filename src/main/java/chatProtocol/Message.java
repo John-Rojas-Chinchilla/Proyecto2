@@ -1,13 +1,19 @@
 package chatProtocol;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlIDREF;
+
 import java.io.Serializable;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Message implements Serializable{
 
     // Atributos
     // ----------------------------------------------------------------------------
-
+    @XmlIDREF
     User sender;
+    @XmlIDREF
     User receiver;
     String message;
 

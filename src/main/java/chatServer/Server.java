@@ -29,7 +29,7 @@ public class Server {
     }
     
     public void run(){
-        IService service = new Service();
+        IService service = Service.instance();
         boolean continuar = true;
         ObjectInputStream in = null;
         ObjectOutputStream out = null;

@@ -1,11 +1,15 @@
 package chatClient.presentation;
 
+import chatClient.Application;
 import chatClient.logic.ServiceProxy;
 import chatClient.presentation.listModel.ListModelItem;
 import chatProtocol.Message;
 import chatProtocol.User;
+import chatServer.Service;
 
 import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,6 +32,7 @@ public class Controller {
 
     public void login(User u) throws Exception {
         User logged = ServiceProxy.instance().login(u);
+        Service.instance().getDataUser(logged);
         model.setCurrentUser(logged);
         model.commit(Model.USER);
     }
@@ -40,6 +45,7 @@ public class Controller {
     }
 
     public void logout(){
+        Service.instance().store();
         try {
             ServiceProxy.instance().logout(model.getCurrentUser());
             for (int i = 1; i < model.getContactos().size() + 1; i++) {
@@ -92,6 +98,4 @@ public class Controller {
 
     public void contactSearch(String nombre) throws IOException {
     }
-
-
 }

@@ -6,6 +6,8 @@ import chatProtocol.Message;
 import chatServer.data.Data;
 import chatServer.data.UsuarioDao;
 
+import java.util.Objects;
+
 public class Service implements IService {
 
     // Atributos
@@ -13,13 +15,26 @@ public class Service implements IService {
 
     private Data data;
     private UsuarioDao usuarioDao;
+    private static Service theInstance;
 
     // Constructores
     // ----------------------------------------------------------------------------
 
-    public Service() {
-        data = new Data();
+    private Service() {
+        try {
+            data = program.data.XmlPersister.instance().load();
+        }
+        catch (Exception e) {
+            data = new Data();
+        }
         usuarioDao = new UsuarioDao();
+    }
+
+    public static Service instance() {
+        if(theInstance == null) {
+            theInstance = new Service();
+        }
+        return theInstance;
     }
 
     // Métodos Específicos
@@ -49,5 +64,24 @@ public class Service implements IService {
             throw new Exception("USUARIO NO REGISTRADO");
         }
         return usuarioDao.read(id);
+    }
+
+    // ----------------------------------------------------------------------------
+
+    public void getDataUser(User user) {
+        for (User us : instance().data.getUsers()) {
+            if (Objects.equals(us.getId(), user.getId())) {
+                user = us;
+            }
+        }
+    }
+
+    public void store() {
+        try {
+            program.data.XmlPersister.instance().store(data);
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
     }
 }
