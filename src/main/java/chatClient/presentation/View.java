@@ -1,6 +1,7 @@
 package chatClient.presentation;
 
 import chatClient.Application;
+import chatClient.presentation.listModel.ListModelItem;
 import chatClient.presentation.listModel.ListaRender;
 import chatClient.presentation.listModel.ListModel;
 import chatProtocol.Message;

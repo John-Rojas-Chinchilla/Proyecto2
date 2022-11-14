@@ -20,6 +20,7 @@ public class User implements Serializable {
     String id;
     String clave;
     String nombre;
+    @XmlIDREF
     List<User> contactos;
     List<Message> chats;
 
@@ -134,5 +135,14 @@ public class User implements Serializable {
             }
         }
         return chatWith;
+    }
+
+    public boolean isContact(User u) {
+        for (User c : contactos) {
+            if(Objects.equals(c.getId(), u.getId())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

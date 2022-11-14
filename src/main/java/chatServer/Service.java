@@ -46,9 +46,7 @@ public class Service implements IService {
     }
 
     public User login(User p) throws Exception {
-        User u = usuarioDao.read(p.getId());
-        data.getUsers().add(u);
-        return u;
+        return usuarioDao.read(p.getId());
     } 
 
     public void logout(User p) throws Exception{
@@ -71,10 +69,15 @@ public class Service implements IService {
 
     // ----------------------------------------------------------------------------
 
+    public Data getData() {
+        return data;
+    }
+
     public void getDataUser(User user) {
         for (User us : instance().data.getUsers()) {
             if (Objects.equals(us.getId(), user.getId())) {
-                user = us;
+                user.setChats(us.getChats());
+                user.setContactos(us.getContactos());
             }
         }
     }

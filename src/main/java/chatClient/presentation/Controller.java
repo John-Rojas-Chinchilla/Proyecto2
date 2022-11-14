@@ -33,11 +33,13 @@ public class Controller {
     public void login(User u) throws Exception {
         User logged = ServiceProxy.instance().login(u);
         Service.instance().getDataUser(logged);
+        model.setMessages(logged.getChats());
+        model.setContactos(logged.getContactos());
         model.setCurrentUser(logged);
         model.commit(Model.USER);
     }
 
-    public void post(String text, User receiver){
+    public void post(String text, User receiver) {
         User sender = model.getCurrentUser();
         Message message = new Message(sender, text, receiver);
         ServiceProxy.instance().post(message, receiver, sender);
@@ -45,6 +47,7 @@ public class Controller {
     }
 
     public void logout(){
+        Service.instance().getData().getUsers().add(model.getCurrentUser());
         Service.instance().store();
         try {
             ServiceProxy.instance().logout(model.getCurrentUser());
@@ -84,8 +87,12 @@ public class Controller {
 
     public void addContact(User user) {
         try {
+            User u = model.getCurrentUser();
             model.getContactos().add(user);
-            model.getCurrentUser().getContactos().add(user);
+            if(!u.isContact(user)) {
+                u.getContactos().add(user);
+            }
+            Service.instance().getData().getUsers().add(user);
             view.modelo.add(new ListModelItem(model.getContactos().get(model.getContactos().size() - 1).getNombre(), new ImageIcon(view.generateIcon(String.valueOf(user.getNombre().charAt(0))))));
             model.commit(Model.USER + Model.CHAT);
         }

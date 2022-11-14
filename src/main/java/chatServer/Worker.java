@@ -16,7 +16,6 @@ public class Worker {
     User user;
     boolean continuar;
 
-
     public Worker(Server srv, ObjectInputStream in, ObjectOutputStream out, User user, IService service) {
         this.srv=srv;
         this.in=in;
@@ -85,7 +84,8 @@ public class Worker {
                         break;
                 }
                 out.flush();
-            } catch (IOException  ex) {
+            }
+            catch (IOException  ex) {
                 System.out.println(ex);
                 continuar = false;
             }                        
