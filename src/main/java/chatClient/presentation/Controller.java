@@ -72,7 +72,7 @@ public class Controller {
             model.setContactos(new ArrayList<>());
             model.setCurrentUser(null);
             model.commit(Model.CHAT);
-            model.commit(Model.USER+Model.CHAT);
+            //model.commit(Model.USER+Model.CHAT);
         } catch (Exception ex) {
         }
     }

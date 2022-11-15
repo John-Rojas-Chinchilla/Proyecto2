@@ -13,13 +13,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-/*
-
- - Clase encargada de actuar como intermediario entre la aplicación y la red.
-
- - Es la encargada de manejar los sockets de la aplicacion.
-
-*/
 
 public class ServiceProxy implements IService {
 
