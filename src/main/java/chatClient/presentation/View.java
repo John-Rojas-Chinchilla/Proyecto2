@@ -81,6 +81,7 @@ public class View implements Observer {
                 controller.logout();
                 contactoLabel.setText("Chat");
                 contactoLabel.setIcon(new ImageIcon());
+                messages.setText("");
             }
         });
         finish.addActionListener(new ActionListener() {
@@ -189,7 +190,7 @@ public class View implements Observer {
     // ----------------------------------------------------------------------------
 
     String generateIcon(String letra) throws IOException {
-        BufferedImage b = new BufferedImage(50,50,BufferedImage.TYPE_INT_RGB);
+        BufferedImage b = new BufferedImage(50,50, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = b.createGraphics();
 
         // fill all the image with white

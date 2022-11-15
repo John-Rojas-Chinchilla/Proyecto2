@@ -74,4 +74,5 @@ public class Model extends java.util.Observable {
     
     public static final int USER = 1;
     public static final int CHAT = 2;
+    public static final int CONTACT = 3;
 }

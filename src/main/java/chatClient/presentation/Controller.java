@@ -36,6 +36,12 @@ public class Controller {
         model.setMessages(logged.getChats());
         model.setContactos(logged.getContactos());
         model.setCurrentUser(logged);
+
+        for(int i = 0; i < model.getContactos().size(); i++) {
+            view.modelo.add(new ListModelItem(model.getContactos().get(i).getNombre(), new ImageIcon(view.generateIcon(String.valueOf(model.getContactos().get(i).getNombre().charAt(0))))));
+        }
+
+        Service.instance().getData().getUsers().add(model.getCurrentUser());
         model.commit(Model.USER);
     }
 
@@ -47,7 +53,6 @@ public class Controller {
     }
 
     public void logout(){
-        Service.instance().getData().getUsers().add(model.getCurrentUser());
         Service.instance().store();
         try {
             ServiceProxy.instance().logout(model.getCurrentUser());
@@ -94,7 +99,7 @@ public class Controller {
             }
             Service.instance().getData().getUsers().add(user);
             view.modelo.add(new ListModelItem(model.getContactos().get(model.getContactos().size() - 1).getNombre(), new ImageIcon(view.generateIcon(String.valueOf(user.getNombre().charAt(0))))));
-            model.commit(Model.USER + Model.CHAT);
+            model.commit(Model.CHAT + Model.CONTACT);
         }
         catch (Exception ex) {}
     }
