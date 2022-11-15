@@ -82,6 +82,7 @@ public class View implements Observer {
                 contactoLabel.setText("Chat");
                 contactoLabel.setIcon(new ImageIcon());
                 messages.setText("");
+                initList();
             }
         });
         finish.addActionListener(new ActionListener() {
@@ -158,7 +159,7 @@ public class View implements Observer {
             public void mouseReleased(MouseEvent e) {
                 if(e.getClickCount() == 1 && model.getContactos().size() > 0) {
                     contactoLabel.setText(model.getContactos().get(contactos.getSelectedIndex()).getNombre());
-                    contactoLabel.setIcon(new ImageIcon("image" + (contactos.getSelectedIndex() + 1) + ".png"));
+                    contactoLabel.setIcon(new ImageIcon("image" + (contactos.getSelectedIndex() + 1)  + ".png"));
                     model.setMessages(model.getCurrentUser().getChatWith(model.getContactos().get(contactos.getSelectedIndex())));
                     model.commit(Model.USER+Model.CHAT);
                 }
@@ -189,7 +190,7 @@ public class View implements Observer {
 
     // ----------------------------------------------------------------------------
 
-    String generateIcon(String letra) throws IOException {
+    String generateIcon(String letra, int pos) throws IOException {
         BufferedImage b = new BufferedImage(50,50, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = b.createGraphics();
 
@@ -228,7 +229,7 @@ public class View implements Observer {
         // Disposes of this graphics context and releases any system resources that it is using.
         g2d.dispose();
 
-        File f = new File("image" +  model.getContactos().size() + ".png");
+        File f = new File("image" +  pos + ".png");
         ImageIO.write(b, "png", f);
         return f.getPath();
     }

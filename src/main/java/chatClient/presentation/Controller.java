@@ -15,6 +15,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class Controller {
     View view;
@@ -38,7 +40,7 @@ public class Controller {
         model.setCurrentUser(logged);
 
         for(int i = 0; i < model.getContactos().size(); i++) {
-            view.modelo.add(new ListModelItem(model.getContactos().get(i).getNombre(), new ImageIcon(view.generateIcon(String.valueOf(model.getContactos().get(i).getNombre().charAt(0))))));
+            view.modelo.add(new ListModelItem(model.getContactos().get(i).getNombre(), new ImageIcon(view.generateIcon(String.valueOf(model.getContactos().get(i).getNombre().charAt(0)), i + 1))));
         }
 
         Service.instance().getData().getUsers().add(model.getCurrentUser());
@@ -68,12 +70,11 @@ public class Controller {
             }
             model.setMessages(new ArrayList<>());
             model.setContactos(new ArrayList<>());
+            model.setCurrentUser(null);
             model.commit(Model.CHAT);
+            model.commit(Model.USER+Model.CHAT);
         } catch (Exception ex) {
         }
-        model.setCurrentUser(null);
-        view.initList();
-        model.commit(Model.USER+Model.CHAT);
     }
         
     public void deliver(Message message){
@@ -97,8 +98,10 @@ public class Controller {
             if(!u.isContact(user)) {
                 u.getContactos().add(user);
             }
-            Service.instance().getData().getUsers().add(user);
-            view.modelo.add(new ListModelItem(model.getContactos().get(model.getContactos().size() - 1).getNombre(), new ImageIcon(view.generateIcon(String.valueOf(user.getNombre().charAt(0))))));
+            if(!Service.instance().isUser(user)) {
+                Service.instance().getData().getUsers().add(user);
+            }
+            view.modelo.add(new ListModelItem(model.getContactos().get(model.getContactos().size() - 1).getNombre(), new ImageIcon(view.generateIcon(String.valueOf(user.getNombre().charAt(0)), model.getContactos().size()))));
             model.commit(Model.CHAT + Model.CONTACT);
         }
         catch (Exception ex) {}

@@ -90,4 +90,13 @@ public class Service implements IService {
             System.out.println(e);
         }
     }
+
+    public boolean isUser(User user) {
+        for(int i = 0; i < data.getUsers().size(); i++) {
+            if(Objects.equals(data.getUsers().get(i).getId(), user.getId())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
