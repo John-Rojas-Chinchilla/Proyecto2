@@ -20,7 +20,6 @@ public class User implements Serializable {
     String id;
     String clave;
     String nombre;
-
     Boolean estado;
     @XmlIDREF
     List<User> contactos;
@@ -33,6 +32,7 @@ public class User implements Serializable {
         this.id = "";
         this.clave = "";
         this.nombre = "";
+        this.estado = false;
         this.contactos = new ArrayList<>();
         this.chats = new ArrayList<>();
     }
@@ -41,7 +41,7 @@ public class User implements Serializable {
         this.id = id;
         this.clave = clave;
         this.nombre = nombre;
-        this.estado = true;
+        this.estado = false;
         this.contactos = new ArrayList<>();
         this.chats = new ArrayList<>();
     }

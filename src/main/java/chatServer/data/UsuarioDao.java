@@ -51,12 +51,13 @@ public class UsuarioDao {
     }
 
     public void update(User u) throws Exception {
-        String sql = "update users set clave=?, nombre=? where id=?";
+        String sql = "update users set clave=?, nombre=?, estado=? where id=?";
 
         PreparedStatement stm = database.prepareStatement(sql);
         stm.setString(1, u.getClave());
         stm.setString(2, u.getNombre());
-        stm.setString(3, u.getId());
+        stm.setBoolean(3, u.getEstado());
+        stm.setString(4, u.getId());
 
         int count = database.executeUpdate(stm);
 
@@ -93,11 +94,25 @@ public class UsuarioDao {
         return resultado;
     }
 
+    public List<User> listadoConectados() throws Exception {
+        List<User> resultado = new ArrayList<User>();
+        String comando = "select * from users u where u.estado=true";
+
+        PreparedStatement stm = database.prepareStatement(comando);
+        ResultSet rs = database.executeQuery(stm);
+
+        while (rs.next()) {
+            resultado.add(from(rs, "u"));
+        }
+        return resultado;
+    }
+
     public User from(ResultSet rs, String alias) throws Exception {
         User u = new User();
         u.setId(rs.getString(alias + ".id"));
         u.setClave(rs.getString(alias + ".clave"));
         u.setNombre(rs.getString(alias + ".nombre"));
+        u.setEstado(rs.getBoolean(alias + ".estado"));
         return u;
     }
 }
