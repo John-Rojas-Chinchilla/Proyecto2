@@ -239,6 +239,15 @@ public class View implements Observer {
     String receiverStyle = "background-color:white; margin-left:5px; margin-right:30px; margin-top:3px; padding:2px;";
 
     public void update(java.util.Observable updatedModel, Object properties) {
+
+        int[] cols = {TableModel.NOMBRE,TableModel.ONLINE};
+        TableModel tabla = new TableModel(model.getContactos(), cols);
+        contactosTable.setModel(tabla);
+        contactosTable.setRowHeight(30);
+        tabla.addCheckBox(TableModel.ONLINE, contactosTable);
+
+        this.panel.revalidate();
+
         int prop = (int) properties;
         if (model.getCurrentUser() == null) {
             Application.window.setSize(600,400);
@@ -264,7 +273,7 @@ public class View implements Observer {
                 }
                 this.messages.setText(text);
             }
-            int[] cols = {TableModel.ICON,TableModel.NOMBRE,TableModel.LOGGED};
+            //int[] cols = {TableModel.ICON,TableModel.NOMBRE,TableModel.LOGGED};
             //contactosTable.setModel(new TableModel(model.getContactos(), cols));
             contactosTable.setRowHeight(30);
             this.panel.revalidate();

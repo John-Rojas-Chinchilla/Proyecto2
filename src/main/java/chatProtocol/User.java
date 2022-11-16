@@ -20,6 +20,8 @@ public class User implements Serializable {
     String id;
     String clave;
     String nombre;
+
+    Boolean estado;
     @XmlIDREF
     List<User> contactos;
     List<Message> chats;
@@ -39,6 +41,7 @@ public class User implements Serializable {
         this.id = id;
         this.clave = clave;
         this.nombre = nombre;
+        this.estado = true;
         this.contactos = new ArrayList<>();
         this.chats = new ArrayList<>();
     }
@@ -77,6 +80,10 @@ public class User implements Serializable {
     public void setContactos(List<User> contactos) {
         this.contactos = contactos;
     }
+
+    public Boolean getEstado() { return estado; }
+
+    public void setEstado(Boolean estado){ this.estado = estado; }
 
     public List<User> contactosSearch(String filtro) {
         return contactos.stream().filter(e->e.getNombre().contains(filtro)).collect(Collectors.toList());

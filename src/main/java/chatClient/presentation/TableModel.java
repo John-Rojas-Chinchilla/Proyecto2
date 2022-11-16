@@ -2,25 +2,26 @@ package chatClient.presentation;
 
 import chatProtocol.User;
 
+import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.text.AbstractDocument;
 import java.awt.*;
 import java.util.List;
 
 public class TableModel extends AbstractTableModel implements javax.swing.table.TableModel {
-    List<Container> rows;
+    List<User> rows;
     int[] cols;
 
-    public static final int ICON = 0;
-    public static final int NOMBRE = 1;
-    public static final int LOGGED = 2;
+    public static final int NOMBRE = 0;
+    public static final int ONLINE = 1;
 
-    String[] colNames = new String[3];
+    //String[] colNames = new String[3];
 
     // ---------------------------------------------------------------------------------------------
 
-    public TableModel(List<Container> rows, int[] cols) {
-        initColNames();
+    public TableModel(List<User> rows, int[] cols) {
+        //initColNames();
         this.rows = rows;
         this.cols = cols;
     }
@@ -37,32 +38,40 @@ public class TableModel extends AbstractTableModel implements javax.swing.table.
         return cols.length;
     }
 
-    public String getColumnName(int col) {
+    /*public String getColumnName(int col) {
         return colNames[cols[col]];
-    }
+    }*/
 
     public Class<?> getColumnClass(int col) {
         return super.getColumnClass(col);
     }
 
+    public void addCheckBox(int column, JTable table){
+        TableColumn tc = table.getColumnModel().getColumn(column);
+        tc.setCellEditor(table.getDefaultEditor(Boolean.class));
+        tc.setCellRenderer(table.getDefaultRenderer(Boolean.class));
+    }
+
     @Override
     public Object getValueAt(int row, int col) {
-        Container c = rows.get(row);
+
+        User u = rows.get(row);
+        //Container c = rows.get(row);
 
         switch (cols[col])
         {
-            //case ICON: return user.getId();
-            //case NOMBRE: return user.getNombre();
-            //case LOGGED: return user.getClave();
+            //case ICON: return c.getId();
+            case NOMBRE: return u.getNombre();
+            case ONLINE: return u.getEstado();
             default: return "";
         }
     }
 
     // ---------------------------------------------------------------------------------------------
 
-    public void initColNames() {
+    /*public void initColNames() {
         colNames[ICON] = "Icon";
         colNames[NOMBRE] = "Nombre";
         colNames[LOGGED] = "Logged";
-    }
+    }*/
 }
