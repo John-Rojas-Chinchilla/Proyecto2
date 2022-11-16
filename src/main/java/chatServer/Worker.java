@@ -53,8 +53,8 @@ public class Worker {
                 //case Protocol.LOGIN: done on accept
                 case Protocol.LOGOUT:
                     try {
+                        service.logout((User)in.readObject());
                         srv.remove(user);
-                        //service.logout(user); //nothing to do
                     } catch (Exception ex) {}
                     stop();
                     break;                 

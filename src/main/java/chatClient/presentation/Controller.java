@@ -7,11 +7,14 @@ import chatProtocol.User;
 import chatServer.Service;
 
 
+import javax.swing.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 public class Controller {
@@ -51,9 +54,9 @@ public class Controller {
     }
 
     public void logout() throws Exception {
-        Service.instance().store();
         try {
             ServiceProxy.instance().logout(model.getCurrentUser());
+            Service.instance().store();
             /*for (int i = 1; i < model.getContactos().size() + 1; i++) {
                 String fileName = "image" + i + ".png";
                 Path path = Paths.get(fileName);
@@ -109,5 +112,12 @@ public class Controller {
     }
 
     public void contactSearch(String nombre) throws IOException {
+    }
+
+    public void setEstados(JTable table) {
+        int i = 0;
+        for(User u: model.getContactos()){
+            table.getModel().setValueAt(u.getEstado(), i++, 1);
+        }
     }
 }

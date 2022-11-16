@@ -40,6 +40,8 @@ public class View implements Observer {
     Model model;
     Controller controller;
 
+    int rowSelected;
+
     // ----------------------------------------------------------------------------
 
     public View() {
@@ -61,6 +63,7 @@ public class View implements Observer {
                     controller.login(u);
                     id.setText("");
                     clave.setText("");
+                    controller.setEstados(contactosTable);
                 } catch (Exception ex) {
                     id.setBackground(Color.orange);
                     id.setToolTipText("Nombre Invalido");
@@ -94,7 +97,7 @@ public class View implements Observer {
             public void actionPerformed(ActionEvent e) {
                 try {
                     String text = mensaje.getText();
-                    User receiver = model.getContactos().get(contactosTable.getSelectedRow() + 1);
+                    User receiver = model.getContactos().get(rowSelected);
                     controller.post(text, receiver);
                 }
                 catch (Exception ex) {
@@ -156,10 +159,10 @@ public class View implements Observer {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if(e.getClickCount() == 1 && model.getContactos().size() > 0) {
-                    int i = contactosTable.getSelectedRow();
-                    contactoLabel.setText(model.getContactos().get(contactosTable.getSelectedRow()).getNombre());
-                    //contactoLabel.setIcon(new ImageIcon("image" + (contactosTable.getSelectedRow() + 1)  + ".png"));
-                    model.setMessages(model.getCurrentUser().getChatWith(model.getContactos().get(contactosTable.getSelectedRow())));
+                    rowSelected = contactosTable.getSelectedRow();
+                    contactoLabel.setText(model.getContactos().get(rowSelected).getNombre());
+                    //contactoLabel.setIcon(new ImageIcon("image" + (rowSelected + 1)  + ".png"));
+                    model.setMessages(model.getCurrentUser().getChatWith(model.getContactos().get(rowSelected)));
                     model.commit(Model.USER+Model.CHAT);
                 }
             }
@@ -246,6 +249,7 @@ public class View implements Observer {
         contactosTable.setModel(tabla);
         contactosTable.setRowHeight(30);
         tabla.addCheckBox(TableModel.ONLINE, contactosTable);
+        controller.setEstados(contactosTable);
         this.panel.revalidate();
 
         int prop = (int) properties;
@@ -267,7 +271,7 @@ public class View implements Observer {
                 for (Message m : model.getMessages()) {
                     if (m.getSender().equals(model.getCurrentUser())) {
                         text += ("Me: " + m.getMessage() + "\n");
-                    } else if (m.getSender().equals(model.getContactos().get(contactosTable.getSelectedRow()))) {
+                    } else if (m.getSender().equals(model.getContactos().get(rowSelected))) {
                         text += (m.getSender().getNombre() + ": " + m.getMessage() + "\n");
                     }
                 }

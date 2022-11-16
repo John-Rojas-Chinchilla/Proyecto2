@@ -7,6 +7,7 @@ import chatServer.data.Data;
 import chatServer.data.UsuarioDao;
 import chatServer.data.XmlPersister;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Service implements IService {
@@ -82,11 +83,20 @@ public class Service implements IService {
         return data;
     }
 
-    public void getDataUser(User user) {
+    public void getDataUser(User user) throws Exception {
         for (User us : instance().data.getUsers()) {
             if (Objects.equals(us.getId(), user.getId())) {
                 user.setChats(us.getChats());
                 user.setContactos(us.getContactos());
+
+                for(int i = 0; i < user.getContactos().size(); i++) {
+                    for(User use : usuarioDao.listadoConectados()) {
+                        if(Objects.equals(user.getContactos().get(i).getId(), use.getId())) {
+                            user.getContactos().get(i).setEstado(use.getEstado());
+                        }
+                    }
+                }
+                break;
             }
         }
     }

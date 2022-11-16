@@ -95,7 +95,7 @@ public class UsuarioDao {
     }
 
     public List<User> listadoConectados() throws Exception {
-        List<User> resultado = new ArrayList<User>();
+        List<User> resultado = new ArrayList<>();
         String comando = "select * from users u where u.estado=true";
 
         PreparedStatement stm = database.prepareStatement(comando);
