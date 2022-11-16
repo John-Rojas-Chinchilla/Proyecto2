@@ -16,12 +16,5 @@ create table messages (
     primary Key(iter)
 );
 
-create table loggedUser (
-    iter integer unsigned auto_increment,
-	userL varchar (15),
-    primary Key(iter)
-);
-
 ALTER TABLE messages ADD Foreign KEY (sender) REFERENCES users (id);
 ALTER TABLE messages ADD Foreign KEY (receiver) REFERENCES users (id);
-ALTER TABLE loggedUser ADD Foreign KEY (userL) REFERENCES users (id);
