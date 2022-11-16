@@ -1,12 +1,10 @@
 package chatClient.presentation;
 
 import chatClient.Application;
-import chatClient.presentation.listModel.ListModelItem;
 import chatClient.presentation.listModel.ListaRender;
 import chatClient.presentation.listModel.ListModel;
 import chatProtocol.Message;
 import chatProtocol.User;
-import chatServer.Service;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -16,7 +14,6 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Observer;
 
@@ -37,8 +34,10 @@ public class View implements Observer {
     private JButton buscarButton;
     private JButton contactoButton;
     private JTextField contactoField;
-    private JList contactos;
+
+    //private JList contactos;
     private JLabel contactoLabel;
+    private JTable contactosTable;
 
     Model model;
     Controller controller;
@@ -48,7 +47,6 @@ public class View implements Observer {
     // ----------------------------------------------------------------------------
 
     public View() {
-        initList();
 
         loginPanel.setVisible(true);
         Application.window.getRootPane().setDefaultButton(login);
@@ -82,7 +80,7 @@ public class View implements Observer {
                 contactoLabel.setText("Chat");
                 contactoLabel.setIcon(new ImageIcon());
                 messages.setText("");
-                initList();
+                initTable();
             }
         });
         finish.addActionListener(new ActionListener() {
@@ -96,7 +94,7 @@ public class View implements Observer {
             public void actionPerformed(ActionEvent e) {
                 try {
                     String text = mensaje.getText();
-                    User receiver = model.getContactos().get(contactos.getSelectedIndex());
+                    User receiver = model.getContactos().get(contactosTable.getSelectedRow());
                     controller.post(text, receiver);
                 }
                 catch (Exception ex) {
@@ -154,13 +152,13 @@ public class View implements Observer {
                 }
             }
         });
-        contactos.addMouseListener(new MouseAdapter() {
+        contactosTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if(e.getClickCount() == 1 && model.getContactos().size() > 0) {
-                    contactoLabel.setText(model.getContactos().get(contactos.getSelectedIndex()).getNombre());
-                    contactoLabel.setIcon(new ImageIcon("image" + (contactos.getSelectedIndex() + 1)  + ".png"));
-                    model.setMessages(model.getCurrentUser().getChatWith(model.getContactos().get(contactos.getSelectedIndex())));
+                    contactoLabel.setText(model.getContactos().get(contactosTable.getSelectedRow()).getNombre());
+                    contactoLabel.setIcon(new ImageIcon("image" + (contactosTable.getSelectedRow() + 1)  + ".png"));
+                    model.setMessages(model.getCurrentUser().getChatWith(model.getContactos().get(contactosTable.getSelectedRow())));
                     model.commit(Model.USER+Model.CHAT);
                 }
             }
@@ -241,7 +239,6 @@ public class View implements Observer {
     String receiverStyle = "background-color:white; margin-left:5px; margin-right:30px; margin-top:3px; padding:2px;";
 
     public void update(java.util.Observable updatedModel, Object properties) {
-
         int prop = (int) properties;
         if (model.getCurrentUser() == null) {
             Application.window.setSize(600,400);
@@ -261,12 +258,17 @@ public class View implements Observer {
                 for (Message m : model.getMessages()) {
                     if (m.getSender().equals(model.getCurrentUser())) {
                         text += ("Me: " + m.getMessage() + "\n");
-                    } else if (m.getSender().equals(model.getContactos().get(contactos.getSelectedIndex()))) {
+                    } else if (m.getSender().equals(model.getContactos().get(contactosTable.getSelectedRow()))) {
                         text += (m.getSender().getNombre() + ": " + m.getMessage() + "\n");
                     }
                 }
                 this.messages.setText(text);
             }
+            int[] cols = {TableModel.ICON,TableModel.NOMBRE,TableModel.LOGGED};
+            //contactosTable.setModel(new TableModel(model.getContactos(), cols));
+            contactosTable.setRowHeight(30);
+            this.panel.revalidate();
+
             this.mensaje.setText("");
         }
         panel.validate();
@@ -276,11 +278,15 @@ public class View implements Observer {
         JOptionPane.showMessageDialog(panel, message, "ERROR", JOptionPane.ERROR_MESSAGE);
     }
 
-    public void initList() {
+    /*public void initList() {
         modelo = new ListModel();
         listaRender = new ListaRender();
         contactos.setModel(modelo);
         contactos.setCellRenderer(listaRender);
+    }*/
+
+    public void initTable() {
+
     }
 
 }

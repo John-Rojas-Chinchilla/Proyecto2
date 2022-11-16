@@ -192,7 +192,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="608f0" class="javax.swing.JList" binding="contactos">
+                  <component id="956de" class="javax.swing.JTable" binding="contactosTable">
                     <constraints/>
                     <properties/>
                   </component>
