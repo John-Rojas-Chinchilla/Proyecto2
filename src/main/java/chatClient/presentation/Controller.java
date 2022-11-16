@@ -1,22 +1,18 @@
 package chatClient.presentation;
 
-import chatClient.Application;
 import chatClient.logic.ServiceProxy;
-import chatClient.presentation.listModel.ListModelItem;
+
 import chatProtocol.Message;
 import chatProtocol.User;
 import chatServer.Service;
 
-import javax.swing.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 public class Controller {
     View view;
@@ -39,9 +35,9 @@ public class Controller {
         model.setContactos(logged.getContactos());
         model.setCurrentUser(logged);
 
-        for(int i = 0; i < model.getContactos().size(); i++) {
+        /*for(int i = 0; i < model.getContactos().size(); i++) {
             view.modelo.add(new ListModelItem(model.getContactos().get(i).getNombre(), new ImageIcon(view.generateIcon(String.valueOf(model.getContactos().get(i).getNombre().charAt(0)), i + 1))));
-        }
+        }*/
 
         Service.instance().getData().getUsers().add(model.getCurrentUser());
         model.commit(Model.USER);
@@ -54,11 +50,11 @@ public class Controller {
         model.commit(Model.CHAT);
     }
 
-    public void logout(){
+    public void logout() throws Exception {
         Service.instance().store();
         try {
             ServiceProxy.instance().logout(model.getCurrentUser());
-            for (int i = 1; i < model.getContactos().size() + 1; i++) {
+            /*for (int i = 1; i < model.getContactos().size() + 1; i++) {
                 String fileName = "image" + i + ".png";
                 Path path = Paths.get(fileName);
                 try {
@@ -67,13 +63,14 @@ public class Controller {
                 catch (IOException ex) {
                     throw new Exception("ERROR");
                 }
-            }
+            }*/
             model.setMessages(new ArrayList<>());
             model.setContactos(new ArrayList<>());
             model.setCurrentUser(null);
             model.commit(Model.CHAT);
-            //model.commit(Model.USER+Model.CHAT);
+            model.commit(Model.USER+Model.CHAT);
         } catch (Exception ex) {
+            throw new Exception("NO SE PUDO DECONECTAR");
         }
     }
         

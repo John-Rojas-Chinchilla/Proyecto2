@@ -1,8 +1,6 @@
 package chatClient.presentation;
 
 import chatClient.Application;
-import chatClient.presentation.listModel.ListaRender;
-import chatClient.presentation.listModel.ListModel;
 import chatProtocol.Message;
 import chatProtocol.User;
 
@@ -41,8 +39,6 @@ public class View implements Observer {
 
     Model model;
     Controller controller;
-    ListaRender listaRender;
-    ListModel modelo;
 
     // ----------------------------------------------------------------------------
 
@@ -76,11 +72,15 @@ public class View implements Observer {
         logout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.logout();
-                contactoLabel.setText("Chat");
-                contactoLabel.setIcon(new ImageIcon());
-                messages.setText("");
-                initTable();
+                try {
+                    controller.logout();
+                    contactoLabel.setText("Chat");
+                    contactoLabel.setIcon(new ImageIcon());
+                    messages.setText("");
+                }
+                catch (Exception ex) {
+                    JOptionPane.showMessageDialog(panel, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         finish.addActionListener(new ActionListener() {
@@ -94,7 +94,7 @@ public class View implements Observer {
             public void actionPerformed(ActionEvent e) {
                 try {
                     String text = mensaje.getText();
-                    User receiver = model.getContactos().get(contactosTable.getSelectedRow());
+                    User receiver = model.getContactos().get(contactosTable.getSelectedRow() + 1);
                     controller.post(text, receiver);
                 }
                 catch (Exception ex) {
@@ -156,8 +156,9 @@ public class View implements Observer {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if(e.getClickCount() == 1 && model.getContactos().size() > 0) {
+                    int i = contactosTable.getSelectedRow();
                     contactoLabel.setText(model.getContactos().get(contactosTable.getSelectedRow()).getNombre());
-                    contactoLabel.setIcon(new ImageIcon("image" + (contactosTable.getSelectedRow() + 1)  + ".png"));
+                    //contactoLabel.setIcon(new ImageIcon("image" + (contactosTable.getSelectedRow() + 1)  + ".png"));
                     model.setMessages(model.getCurrentUser().getChatWith(model.getContactos().get(contactosTable.getSelectedRow())));
                     model.commit(Model.USER+Model.CHAT);
                 }
@@ -287,9 +288,5 @@ public class View implements Observer {
         contactos.setModel(modelo);
         contactos.setCellRenderer(listaRender);
     }*/
-
-    public void initTable() {
-
-    }
 
 }

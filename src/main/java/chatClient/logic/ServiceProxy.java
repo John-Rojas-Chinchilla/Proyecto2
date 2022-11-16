@@ -83,10 +83,11 @@ public class ServiceProxy implements IService {
         }
     }
     
-    public void logout(User u) throws Exception{
+    public void logout(User u) throws Exception {
         out.writeInt(Protocol.LOGOUT);
         out.writeObject(u);
         out.flush();
+        u.setEstado(false);
         this.stop();
         this.disconnect();
     }

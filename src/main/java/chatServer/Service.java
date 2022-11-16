@@ -46,11 +46,20 @@ public class Service implements IService {
     }
 
     public User login(User p) throws Exception {
-        return usuarioDao.read(p.getId());
+        User u = usuarioDao.read(p.getId());
+        if(u != null) {
+            u.setEstado(true);
+            usuarioDao.update(u);
+        }
+        return u;
     } 
 
     public void logout(User p) throws Exception{
-        // nothing to do
+        User u = usuarioDao.read(p.getId());
+        if(u != null) {
+            u.setEstado(false);
+            usuarioDao.update(u);
+        }
     }
 
     public void register(User u) throws Exception {

@@ -75,6 +75,21 @@ public class Server {
                             System.out.println("Conexion cerrada...");
                         }
                         break;
+                    case Protocol.LOGOUT:
+                        try {
+                            service.logout((User)in.readObject());
+                            out.writeInt(Protocol.ERROR_NO_ERROR);
+                            out.flush();
+                            skt.close();
+                            System.out.println("Conexion cerrada...");
+                        }
+                        catch (Exception ex) {
+                            out.writeInt(Protocol.ERROR_LOGIN);
+                            out.flush();
+                            skt.close();
+                            System.out.println("Conexion cerrada...");
+                        }
+                        break;
                     default:
                         out.writeInt(Protocol.ERROR_LOGIN);
                         out.flush();
