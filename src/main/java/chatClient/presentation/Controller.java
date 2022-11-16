@@ -101,7 +101,7 @@ public class Controller {
             if(!Service.instance().isUser(user)) {
                 Service.instance().getData().getUsers().add(user);
             }
-            view.modelo.add(new ListModelItem(model.getContactos().get(model.getContactos().size() - 1).getNombre(), new ImageIcon(view.generateIcon(String.valueOf(user.getNombre().charAt(0)), model.getContactos().size()))));
+            //view.modelo.add(new ListModelItem(model.getContactos().get(model.getContactos().size() - 1).getNombre(), new ImageIcon(view.generateIcon(String.valueOf(user.getNombre().charAt(0)), model.getContactos().size()))));
             model.commit(Model.CHAT + Model.CONTACT);
         }
         catch (Exception ex) {}

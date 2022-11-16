@@ -5,8 +5,6 @@ import chatProtocol.User;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
-import javax.swing.text.AbstractDocument;
-import java.awt.*;
 import java.util.List;
 
 public class TableModel extends AbstractTableModel implements javax.swing.table.TableModel {
@@ -16,12 +14,12 @@ public class TableModel extends AbstractTableModel implements javax.swing.table.
     public static final int NOMBRE = 0;
     public static final int ONLINE = 1;
 
-    //String[] colNames = new String[3];
+    String[] colNames = new String[2];
 
     // ---------------------------------------------------------------------------------------------
 
     public TableModel(List<User> rows, int[] cols) {
-        //initColNames();
+        initColNames();
         this.rows = rows;
         this.cols = cols;
     }
@@ -38,9 +36,9 @@ public class TableModel extends AbstractTableModel implements javax.swing.table.
         return cols.length;
     }
 
-    /*public String getColumnName(int col) {
+    public String getColumnName(int col) {
         return colNames[cols[col]];
-    }*/
+    }
 
     public Class<?> getColumnClass(int col) {
         return super.getColumnClass(col);
@@ -69,9 +67,8 @@ public class TableModel extends AbstractTableModel implements javax.swing.table.
 
     // ---------------------------------------------------------------------------------------------
 
-    /*public void initColNames() {
-        colNames[ICON] = "Icon";
-        colNames[NOMBRE] = "Nombre";
-        colNames[LOGGED] = "Logged";
-    }*/
+    public void initColNames() {
+        colNames[NOMBRE] = "";
+        colNames[ONLINE] = "";
+    }
 }

@@ -245,7 +245,6 @@ public class View implements Observer {
         contactosTable.setModel(tabla);
         contactosTable.setRowHeight(30);
         tabla.addCheckBox(TableModel.ONLINE, contactosTable);
-
         this.panel.revalidate();
 
         int prop = (int) properties;
@@ -273,11 +272,6 @@ public class View implements Observer {
                 }
                 this.messages.setText(text);
             }
-            //int[] cols = {TableModel.ICON,TableModel.NOMBRE,TableModel.LOGGED};
-            //contactosTable.setModel(new TableModel(model.getContactos(), cols));
-            contactosTable.setRowHeight(30);
-            this.panel.revalidate();
-
             this.mensaje.setText("");
         }
         panel.validate();
