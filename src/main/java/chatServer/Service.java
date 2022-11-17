@@ -99,7 +99,7 @@ public class Service implements IService {
                 m1.addAll(messageDao.findByReceiver(user.getId()));
                 user.setChats(us.getChats());
                 user.setContactos(us.getContactos());
-                setContactsState(user);
+                this.setContactsState(user);
                 break;
             }
         }

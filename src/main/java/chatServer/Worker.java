@@ -113,7 +113,7 @@ public class Worker {
 
     public void status(User user) {
         try {
-            out.writeInt(Protocol.STATUS);
+            out.writeInt(Protocol.CONTACT_STATUS);
             out.writeObject(user);
             out.flush();
         }

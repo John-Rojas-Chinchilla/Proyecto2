@@ -29,7 +29,7 @@ public class Controller {
         User logged = ServiceProxy.instance().login(u);
         Service.instance().loadData(logged.getId());
         Service.instance().getDataUser(logged);
-        //ServiceProxy.instance().setContactsState(u);
+        ServiceProxy.instance().setContactsState(logged);
         model.setMessages(logged.getChats());
         model.setContactos(logged.getContactos());
         model.setCurrentUser(logged);
