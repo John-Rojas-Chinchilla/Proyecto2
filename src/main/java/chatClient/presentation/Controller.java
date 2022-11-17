@@ -55,6 +55,7 @@ public class Controller {
     public void logout() throws Exception {
         try {
             ServiceProxy.instance().logout(model.getCurrentUser());
+            ServiceProxy.instance().setContactsState(model.getCurrentUser());
             Service.instance().store(model.getCurrentUser().getId());
 
             /*for (int i = 1; i < model.getContactos().size() + 1; i++) {
@@ -84,8 +85,12 @@ public class Controller {
         model.commit(Model.CHAT);
     }
 
-    public void status(User user) {
-        model.setCurrentUser(user);
+    public void status(User user, boolean estado) {
+
+        if(model.getCurrentUser().isContact(user)) {
+            model.getCurrentUser().getById(user.getId()).setEstado(estado);
+        }
+
         model.commit(Model.CHAT);
     }
 

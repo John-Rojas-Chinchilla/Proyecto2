@@ -112,11 +112,9 @@ public class Server {
         System.out.println("Quedan: " + workers.size());
     }
 
-    public void statusContact(User user) throws Exception {
+    public void statusContact(User user, boolean estado) throws Exception {
         for(Worker wk:workers){
-            if (Objects.equals(wk.user.getId(), user.getId())) {
-                wk.status(user);
-            }
+            wk.status(user, estado);
         }
     }
 }

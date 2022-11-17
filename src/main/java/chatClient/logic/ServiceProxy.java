@@ -86,7 +86,6 @@ public class ServiceProxy implements IService {
         out.writeInt(Protocol.LOGOUT);
         out.writeObject(u);
         out.flush();
-        u.setEstado(false);
         this.stop();
         this.disconnect();
     }
@@ -187,7 +186,7 @@ public class ServiceProxy implements IService {
                     case Protocol.CONTACT_STATUS:
                         try {
                             User user = (User)in.readObject();
-                            statusDeliver(user);
+                            statusDeliver(user, in.readBoolean());
                         }
                         catch (ClassNotFoundException ex) {
                         }
@@ -218,10 +217,10 @@ public class ServiceProxy implements IService {
         );
     }
 
-    private void statusDeliver(final User user){
+    private void statusDeliver(final User user, boolean estado){
         SwingUtilities.invokeLater(new Runnable(){
             public void run(){
-                controller.status(user);
+                controller.status(user, estado);
             }
         }
         );

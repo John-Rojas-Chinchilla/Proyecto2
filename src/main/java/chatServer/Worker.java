@@ -53,7 +53,10 @@ public class Worker {
                 //case Protocol.LOGIN: done on accept
                 case Protocol.LOGOUT:
                     try {
-                        service.logout((User)in.readObject());
+                        User u = (User)in.readObject();
+                        service.logout(u);
+                        u.setEstado(false);
+                        srv.statusContact(u, false);
                         srv.remove(user);
                     } catch (Exception ex) {}
                     stop();
@@ -88,7 +91,7 @@ public class Worker {
                         try {
                             User u = (User)in.readObject();
                             service.setContactsState(u);
-                            srv.statusContact(u);
+                            srv.statusContact(u, true);
                         } catch (Exception ex) {
                         }
                         break;
@@ -111,10 +114,11 @@ public class Worker {
         }
     }
 
-    public void status(User user) {
+    public void status(User user, boolean estado) {
         try {
             out.writeInt(Protocol.CONTACT_STATUS);
             out.writeObject(user);
+            out.writeBoolean(estado);
             out.flush();
         }
         catch (Exception ex) {

@@ -149,4 +149,14 @@ public class User implements Serializable {
         }
         return false;
     }
+
+    public User getById(String id) {
+        for(User u : contactos) {
+            if(Objects.equals(u.getId(), id)) {
+                return u;
+            }
+        }
+        return null;
+    }
+
 }
