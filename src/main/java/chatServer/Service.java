@@ -120,7 +120,10 @@ public class Service implements IService {
         for(int i = 0; i < user.getContactos().size(); i++) {
             for(User use : usuarioDao.listadoConectados()) {
                 if(Objects.equals(user.getContactos().get(i).getId(), use.getId())) {
-                    user.getContactos().get(i).setEstado(use.getEstado());
+                    user.getContactos().get(i).setEstado(true);
+                }
+                else {
+                    user.getContactos().get(i).setEstado(false);
                 }
             }
         }

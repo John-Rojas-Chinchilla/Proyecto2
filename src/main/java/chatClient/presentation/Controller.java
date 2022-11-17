@@ -29,7 +29,7 @@ public class Controller {
         User logged = ServiceProxy.instance().login(u);
         Service.instance().loadData(logged.getId());
         Service.instance().getDataUser(logged);
-        ServiceProxy.instance().setContactsState(u);
+        //ServiceProxy.instance().setContactsState(u);
         model.setMessages(logged.getChats());
         model.setContactos(logged.getContactos());
         model.setCurrentUser(logged);
@@ -38,7 +38,10 @@ public class Controller {
             view.modelo.add(new ListModelItem(model.getContactos().get(i).getNombre(), new ImageIcon(view.generateIcon(String.valueOf(model.getContactos().get(i).getNombre().charAt(0)), i + 1))));
         }*/
 
-        Service.instance().getData().getUsers().add(model.getCurrentUser());
+        if(!Service.instance().isUser(model.getCurrentUser())) {
+            Service.instance().getData().getUsers().add(model.getCurrentUser());
+        }
+
         model.commit(Model.USER);
     }
 
