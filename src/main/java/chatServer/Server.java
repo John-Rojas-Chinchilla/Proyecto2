@@ -111,5 +111,12 @@ public class Server {
         for(Worker wk:workers) if(wk.user.equals(u)){workers.remove(wk);break;}
         System.out.println("Quedan: " + workers.size());
     }
-    
+
+    public void statusContact(User user){
+        for(Worker wk:workers){
+            if (Objects.equals(wk.user.getId(), user.getId())) {
+                wk.deliver(message);
+            }
+        }
+    }
 }

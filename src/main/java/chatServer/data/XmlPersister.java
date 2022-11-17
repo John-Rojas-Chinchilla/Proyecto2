@@ -18,8 +18,8 @@ public class XmlPersister {
         path = p;
     }
 
-    public static XmlPersister instance(String id) {
-        if (theInstance == null) {
+    public static XmlPersister instance(String id, Boolean newU) {
+        if (theInstance == null || newU) {
             theInstance = new XmlPersister("UsersData" + id + ".xml");
         }
         return theInstance;
@@ -28,12 +28,17 @@ public class XmlPersister {
     // ---------------------------------------------------------------------------------------------
 
     public Data load() throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(Data.class);
-        FileInputStream is = new FileInputStream(path);
-        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        Data result = (Data) unmarshaller.unmarshal(is);
-        is.close();
-        return result;
+        try {
+            JAXBContext jaxbContext = JAXBContext.newInstance(Data.class);
+            FileInputStream is = new FileInputStream(path);
+            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+            Data result = (Data) unmarshaller.unmarshal(is);
+            is.close();
+            return result;
+        }
+        catch (Exception ex) {
+            return new Data();
+        }
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -45,5 +50,11 @@ public class XmlPersister {
         marshaller.marshal(d, os);
         os.flush();
         os.close();
+    }
+
+    // ---------------------------------------------------------------------------------------------
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

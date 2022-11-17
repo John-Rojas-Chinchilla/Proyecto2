@@ -100,4 +100,13 @@ public class Worker {
         } catch (IOException ex) {
         }
     }
+
+    public void status(User user) {
+        try {
+
+        }
+        catch (Exception ex) {
+
+        }
+    }
 }

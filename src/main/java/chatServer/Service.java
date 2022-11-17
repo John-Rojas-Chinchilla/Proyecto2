@@ -88,7 +88,7 @@ public class Service implements IService {
             if (Objects.equals(us.getId(), user.getId())) {
                 user.setChats(us.getChats());
                 user.setContactos(us.getContactos());
-                setContactsStates(user);
+                setContactsState(user);
                 break;
             }
         }
@@ -96,7 +96,7 @@ public class Service implements IService {
 
     public void store(String id) {
         try {
-            XmlPersister.instance(id).store(data);
+            XmlPersister.instance(id, false).store(data);
         }
         catch (Exception e) {
             System.out.println(e);
@@ -104,7 +104,7 @@ public class Service implements IService {
     }
 
     public void loadData(String id) throws Exception {
-        data = XmlPersister.instance(id).load();
+        data = XmlPersister.instance(id, true).load();
     }
 
     public boolean isUser(User user) {
@@ -116,7 +116,7 @@ public class Service implements IService {
         return false;
     }
 
-    public void setContactsStates(User user) throws Exception {
+    public void setContactsState(User user) throws Exception {
         for(int i = 0; i < user.getContactos().size(); i++) {
             for(User use : usuarioDao.listadoConectados()) {
                 if(Objects.equals(user.getContactos().get(i).getId(), use.getId())) {
