@@ -67,11 +67,11 @@ public class MessageDao {
         }
     }
 
-    public void deleteByReceiver(Message m) throws Exception {
+    public void deleteByReceiver(String m) throws Exception {
         String sql = "delete from messages where iter=?";
 
         PreparedStatement stm = database.prepareStatement(sql);
-        stm.setString(1, m.getReceiver().getId());
+        stm.setString(1, m);
 
         int count = database.executeUpdate(stm);
 
@@ -86,7 +86,6 @@ public class MessageDao {
 
         PreparedStatement stm = database.prepareStatement(comando);
         stm.setString(1, id);
-
         ResultSet rs = database.executeQuery(stm);
 
         while (rs.next()) {
@@ -99,8 +98,10 @@ public class MessageDao {
         UsuarioDao u = new UsuarioDao();
         Message m = new Message();
         m.setMessage(rs.getString(alias + ".message"));
-        m.setSender(u.from(rs, "u"));
-        m.setReceiver(u.from(rs, "u"));
+        m.setSender(u.read(rs.getString(alias + ".sender")));
+        m.setReceiver(u.read(rs.getString(alias + ".receiver")));
+        //m.setSender(u.from(rs, "u"));
+        // m.setReceiver(u.from(rs, "u"));
         return m;
     }
 }

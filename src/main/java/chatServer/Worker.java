@@ -62,10 +62,12 @@ public class Worker {
                     Message message;
                     try {
                         message = (Message)in.readObject();
+                        service.post(message, null, null);
                         srv.deliver(message, (User)in.readObject(), (User)in.readObject());
-                        //service.post(message); // if wants to save messages, ex. recivier no logged on
                         System.out.println(user.getNombre()+": "+message.getMessage());
                     } catch (ClassNotFoundException ex) {
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
                     }
                     break;
                     case Protocol.CONTACT:

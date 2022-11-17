@@ -45,7 +45,7 @@ public class Controller {
         model.commit(Model.USER);
     }
 
-    public void post(String text, User receiver) {
+    public void post(String text, User receiver) throws Exception {
         User sender = model.getCurrentUser();
         Message message = new Message(sender, text, receiver);
         ServiceProxy.instance().post(message, receiver, sender);

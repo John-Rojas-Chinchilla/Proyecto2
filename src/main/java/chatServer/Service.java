@@ -4,9 +4,12 @@ import chatProtocol.User;
 import chatProtocol.IService;
 import chatProtocol.Message;
 import chatServer.data.Data;
+import chatServer.data.MessageDao;
 import chatServer.data.UsuarioDao;
 import chatServer.data.XmlPersister;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Service implements IService {
@@ -16,6 +19,7 @@ public class Service implements IService {
 
     private Data data;
     private UsuarioDao usuarioDao;
+    private MessageDao messageDao;
     private static Service theInstance;
 
     // Constructores
@@ -30,6 +34,7 @@ public class Service implements IService {
             data = new Data();
         }*/
         usuarioDao = new UsuarioDao();
+        messageDao = new MessageDao();
     }
 
     public static Service instance() {
@@ -42,8 +47,11 @@ public class Service implements IService {
     // Métodos Específicos
     // ----------------------------------------------------------------------------
 
-    public void post(Message m, User r, User s){
-        // if wants to save messages, ex. recivier no logged on
+    public void post(Message m, User r, User s) throws Exception {
+        boolean estado = usuarioDao.read(m.getReceiver().getId()).getEstado();
+        if (!estado) {
+            messageDao.create(m);
+        }
     }
 
     public User login(User p) throws Exception {
@@ -84,14 +92,18 @@ public class Service implements IService {
     }
 
     public void getDataUser(User user) throws Exception {
+        List<Message> m1;
         for (User us : instance().data.getUsers()) {
             if (Objects.equals(us.getId(), user.getId())) {
+                m1 = us.getChats();
+                m1.addAll(messageDao.findByReceiver(user.getId()));
                 user.setChats(us.getChats());
                 user.setContactos(us.getContactos());
                 setContactsState(user);
                 break;
             }
         }
+        messageDao.deleteByReceiver(user.getId());
     }
 
     public void store(String id) {
