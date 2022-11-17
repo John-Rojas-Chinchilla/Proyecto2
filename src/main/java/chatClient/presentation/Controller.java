@@ -27,9 +27,9 @@ public class Controller {
 
     public void login(User u) throws Exception {
         User logged = ServiceProxy.instance().login(u);
-        ServiceProxy.instance().setContactsState(u);
         Service.instance().loadData(logged.getId());
         Service.instance().getDataUser(logged);
+        ServiceProxy.instance().setContactsState(u);
         model.setMessages(logged.getChats());
         model.setContactos(logged.getContactos());
         model.setCurrentUser(logged);
