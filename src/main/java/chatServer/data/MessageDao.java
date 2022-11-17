@@ -68,16 +68,16 @@ public class MessageDao {
     }
 
     public void deleteByReceiver(String m) throws Exception {
-        String sql = "delete from messages where iter=?";
+        String sql = "delete from messages where receiver=?";
 
         PreparedStatement stm = database.prepareStatement(sql);
         stm.setString(1, m);
 
         int count = database.executeUpdate(stm);
 
-        if (count == 0) {
+        /*if (count == 0) {
             throw new Exception("USER NO EXISTE");
-        }
+        }*/
     }
 
     public List<Message> findByReceiver(String id) throws Exception {
