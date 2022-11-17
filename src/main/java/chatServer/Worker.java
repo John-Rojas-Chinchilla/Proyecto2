@@ -82,6 +82,14 @@ public class Worker {
                             out.flush();
                         }
                         break;
+                    case Protocol.STATUS:
+                        try {
+                            User u = (User)in.readObject();
+                            service.setContactsState(u);
+                            srv.statusContact(u);
+                        } catch (Exception ex) {
+                        }
+                        break;
                 }
                 out.flush();
             }
@@ -103,10 +111,11 @@ public class Worker {
 
     public void status(User user) {
         try {
-
+            out.writeInt(Protocol.STATUS);
+            out.writeObject(user);
+            out.flush();
         }
         catch (Exception ex) {
-
         }
     }
 }

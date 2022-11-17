@@ -27,6 +27,7 @@ public class Controller {
 
     public void login(User u) throws Exception {
         User logged = ServiceProxy.instance().login(u);
+        ServiceProxy.instance().setContactsState(u);
         Service.instance().loadData(logged.getId());
         Service.instance().getDataUser(logged);
         model.setMessages(logged.getChats());
@@ -77,6 +78,11 @@ public class Controller {
     public void deliver(Message message){
         model.messages.add(message);
         model.getCurrentUser().getChats().add(message);
+        model.commit(Model.CHAT);
+    }
+
+    public void status(User user) {
+        model.setCurrentUser(user);
         model.commit(Model.CHAT);
     }
 

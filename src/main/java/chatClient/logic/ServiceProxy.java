@@ -5,14 +5,12 @@ import chatProtocol.IService;
 import chatProtocol.Message;
 import chatProtocol.Protocol;
 import chatProtocol.User;
-import chatServer.Service;
 
 import javax.swing.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.List;
 
 
 public class ServiceProxy implements IService {
@@ -104,6 +102,15 @@ public class ServiceProxy implements IService {
         }   
     }
 
+    public void setContactsState(User user) throws Exception {
+        try {
+            out.writeInt(Protocol.STATUS);
+            out.writeObject(user);
+            out.flush();
+        } catch (IOException ex) {
+        }
+    }
+
     public void register(User u) throws Exception {
         connect();
         try {
@@ -177,6 +184,14 @@ public class ServiceProxy implements IService {
                         catch (Exception ex) {
                         }
                         break;
+                    case Protocol.CONTACT_STATUS:
+                        try {
+                            User user = (User)in.readObject();
+                            statusDeliver(user);
+                        }
+                        catch (ClassNotFoundException ex) {
+                        }
+                        break;
                 }
                 out.flush();
             } catch (IOException  ex) {
@@ -198,6 +213,15 @@ public class ServiceProxy implements IService {
         SwingUtilities.invokeLater(new Runnable(){
             public void run(){
                 controller.addContact(user);
+            }
+        }
+        );
+    }
+
+    private void statusDeliver(final User user){
+        SwingUtilities.invokeLater(new Runnable(){
+            public void run(){
+                controller.status(user);
             }
         }
         );
