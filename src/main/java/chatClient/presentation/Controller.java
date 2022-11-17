@@ -86,7 +86,6 @@ public class Controller {
     }
 
     public void status(User user, boolean estado) {
-
         if(model.getCurrentUser().isContact(user)) {
             model.getCurrentUser().getById(user.getId()).setEstado(estado);
         }

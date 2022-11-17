@@ -113,8 +113,11 @@ public class Server {
     }
 
     public void statusContact(User user, boolean estado) throws Exception {
-        for(Worker wk:workers){
+        for(Worker wk:workers) {
             wk.status(user, estado);
+            for(Worker wl : workers){
+                wk.status(wl.user, estado);
+            }
         }
     }
 }
