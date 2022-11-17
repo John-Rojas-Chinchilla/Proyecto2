@@ -18,9 +18,9 @@ public class XmlPersister {
         path = p;
     }
 
-    public static XmlPersister instance() {
-        if (theInstance == null){
-            theInstance = new XmlPersister("UsersData.xml");
+    public static XmlPersister instance(String id) {
+        if (theInstance == null) {
+            theInstance = new XmlPersister("UsersData" + id + ".xml");
         }
         return theInstance;
     }

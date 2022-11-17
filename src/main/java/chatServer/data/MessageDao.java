@@ -81,7 +81,7 @@ public class MessageDao {
     }
 
     public List<Message> findByReceiver(String id) throws Exception {
-        List<Message> resultado = new ArrayList<Message>();
+        List<Message> resultado = new ArrayList<>();
         String comando = "select * from messages m where m.receiver=?";
 
         PreparedStatement stm = database.prepareStatement(comando);

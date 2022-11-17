@@ -63,7 +63,6 @@ public class View implements Observer {
                     controller.login(u);
                     id.setText("");
                     clave.setText("");
-                    controller.setEstados(contactosTable);
                 } catch (Exception ex) {
                     id.setBackground(Color.orange);
                     id.setToolTipText("Nombre Invalido");

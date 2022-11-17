@@ -9,13 +9,7 @@ import chatServer.Service;
 
 import javax.swing.*;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 
 public class Controller {
     View view;
@@ -33,6 +27,7 @@ public class Controller {
 
     public void login(User u) throws Exception {
         User logged = ServiceProxy.instance().login(u);
+        Service.instance().loadData(logged.getId());
         Service.instance().getDataUser(logged);
         model.setMessages(logged.getChats());
         model.setContactos(logged.getContactos());
@@ -56,7 +51,8 @@ public class Controller {
     public void logout() throws Exception {
         try {
             ServiceProxy.instance().logout(model.getCurrentUser());
-            Service.instance().store();
+            Service.instance().store(model.getCurrentUser().getId());
+
             /*for (int i = 1; i < model.getContactos().size() + 1; i++) {
                 String fileName = "image" + i + ".png";
                 Path path = Paths.get(fileName);
@@ -67,6 +63,7 @@ public class Controller {
                     throw new Exception("ERROR");
                 }
             }*/
+
             model.setMessages(new ArrayList<>());
             model.setContactos(new ArrayList<>());
             model.setCurrentUser(null);
