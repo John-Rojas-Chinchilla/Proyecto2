@@ -1,24 +1,36 @@
 package chatProtocol;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlID;
+import jakarta.xml.bind.annotation.XmlIDREF;
+
 import java.io.Serializable;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Message implements Serializable{
 
     // Atributos
     // ----------------------------------------------------------------------------
-
+    @XmlIDREF
     User sender;
+    @XmlIDREF
+    User receiver;
     String message;
 
     // Constructores
     // ----------------------------------------------------------------------------
 
     public Message() {
+        this.sender = null;
+        this.message = "";
+        this.receiver = null;
     }
 
-    public Message(User sedner,String message) {
-        this.sender = sedner;
+    public Message(User sender, String message, User receiver) {
+        this.sender = sender;
         this.message = message;
+        this.receiver = receiver;
     }
 
     // Getters and Setters
@@ -39,5 +51,12 @@ public class Message implements Serializable{
     public void setMessage(String message) {
         this.message = message;
     }
-    
+
+    public User getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(User receiver) {
+        this.receiver = receiver;
+    }
 }

@@ -13,6 +13,7 @@ import chatProtocol.User;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collections;
+import java.util.Objects;
 
 public class Server {
     ServerSocket srv;
@@ -28,7 +29,7 @@ public class Server {
     }
     
     public void run(){
-        IService service = new Service();
+        IService service = Service.instance();
         boolean continuar = true;
         ObjectInputStream in = null;
         ObjectOutputStream out = null;
@@ -98,9 +99,11 @@ public class Server {
         return user;
     }
     
-    public void deliver(Message message){
+    public void deliver(Message message, User receiver, User sender){
         for(Worker wk:workers){
-            wk.deliver(message);
+            if (Objects.equals(wk.user.getId(), receiver.getId()) || Objects.equals(wk.user.getId(), sender.getId())){
+                wk.deliver(message);
+            }
         }        
     } 
     
@@ -108,5 +111,13 @@ public class Server {
         for(Worker wk:workers) if(wk.user.equals(u)){workers.remove(wk);break;}
         System.out.println("Quedan: " + workers.size());
     }
-    
+
+    public void statusContact(User user, boolean estado) throws Exception {
+        for(Worker wk:workers) {
+            wk.status(user, estado);
+            for(Worker wl : workers){
+                wk.status(wl.user, estado);
+            }
+        }
+    }
 }

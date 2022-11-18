@@ -9,6 +9,10 @@ public class Protocol {
     public static final int LOGOUT = 2;
     public static final int POST = 3;
     public static final int REGISTER = 4;
+    public static final int CONTACT = 5;
+    public static final int CONTACT_RESPONSE = 6;
+    public static final int STATUS = 7;
+    public static final int CONTACT_STATUS = 8;
 
     public static final int DELIVER = 10;
     
@@ -17,4 +21,6 @@ public class Protocol {
     public static final int ERROR_LOGOUT = 2;
     public static final int ERROR_POST = 3;
     public static final int ERROR_REGISTER = 4;
+    public static final int ERROR_CONTACT = 5;
+
 }

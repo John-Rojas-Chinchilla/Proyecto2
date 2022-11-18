@@ -1,18 +1,26 @@
 package chatProtocol;
 
+import jakarta.xml.bind.annotation.*;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class User implements Serializable {
 
     // Atributos
     // ----------------------------------------------------------------------------
-
+    @XmlID
     String id;
     String clave;
     String nombre;
+    Boolean estado;
+    @XmlIDREF
+    List<User> contactos;
+    List<Message> chats;
 
     // Constructores
     // ----------------------------------------------------------------------------
@@ -21,12 +29,18 @@ public class User implements Serializable {
         this.id = "";
         this.clave = "";
         this.nombre = "";
+        this.estado = false;
+        this.contactos = new ArrayList<>();
+        this.chats = new ArrayList<>();
     }
 
     public User(String id, String clave, String nombre) {
         this.id = id;
         this.clave = clave;
         this.nombre = nombre;
+        this.estado = false;
+        this.contactos = new ArrayList<>();
+        this.chats = new ArrayList<>();
     }
 
     // Getters and Setters
@@ -56,6 +70,30 @@ public class User implements Serializable {
         this.nombre = nombre;
     }
 
+    public List<User> getContactos() {
+        return contactos;
+    }
+
+    public void setContactos(List<User> contactos) {
+        this.contactos = contactos;
+    }
+
+    public Boolean getEstado() { return estado; }
+
+    public void setEstado(Boolean estado){ this.estado = estado; }
+
+    public List<User> contactosSearch(String filtro) {
+        return contactos.stream().filter(e->e.getNombre().contains(filtro)).collect(Collectors.toList());
+    }
+
+    public List<Message> getChats() {
+        return chats;
+    }
+
+    public void setChats(List<Message> chats) {
+        this.chats = chats;
+    }
+
     // Métodos Específicos
     // ----------------------------------------------------------------------------
 
@@ -82,6 +120,47 @@ public class User implements Serializable {
             return false;
         }
         return true;
+    }
+
+    public boolean existContact(String nombre) {
+        for (User contacto : contactos) {
+            if (Objects.equals(contacto.getNombre(), nombre)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List<Message> getChatWith(User s) {
+        List chatWith = new ArrayList();
+        for(Message ms : chats) {
+            if ((Objects.equals(ms.getReceiver().getId(), s.getId()) && Objects.equals(ms.getSender().getId(), this.getId())) ||(Objects.equals(ms.getReceiver().getId(), this.getId())) && Objects.equals(ms.getSender().getId(), s.getId())) {
+                chatWith.add(ms);
+            }
+        }
+        return chatWith;
+    }
+
+    public boolean isContact(User u) {
+        for (User c : contactos) {
+            if(Objects.equals(c.getId(), u.getId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public User getById(String id) {
+        for(User u : contactos) {
+            if(Objects.equals(u.getId(), id)) {
+                return u;
+            }
+        }
+        return null;
+    }
+
+    public List<User> getByNombre(String filtro) {
+        return contactos.stream().filter(e->e.getNombre().contains(filtro)).collect(Collectors.toList());
     }
 
 }

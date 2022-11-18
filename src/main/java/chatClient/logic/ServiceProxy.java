@@ -5,7 +5,6 @@ import chatProtocol.IService;
 import chatProtocol.Message;
 import chatProtocol.Protocol;
 import chatProtocol.User;
-import chatServer.Service;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -13,13 +12,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-/*
-
- - Clase encargada de actuar como intermediario entre la aplicación y la red.
-
- - Es la encargada de manejar los sockets de la aplicacion.
-
-*/
 
 public class ServiceProxy implements IService {
 
@@ -90,7 +82,7 @@ public class ServiceProxy implements IService {
         }
     }
     
-    public void logout(User u) throws Exception{
+    public void logout(User u) throws Exception {
         out.writeInt(Protocol.LOGOUT);
         out.writeObject(u);
         out.flush();
@@ -98,13 +90,24 @@ public class ServiceProxy implements IService {
         this.disconnect();
     }
     
-    public void post(Message message){
+    public void post(Message message, User receiver, User sender){
         try {
             out.writeInt(Protocol.POST);
             out.writeObject(message);
+            out.writeObject(receiver);
+            out.writeObject(sender);
             out.flush();
         } catch (IOException ex) {
         }   
+    }
+
+    public void setContactsState(User user) throws Exception {
+        try {
+            out.writeInt(Protocol.STATUS);
+            out.writeObject(user);
+            out.flush();
+        } catch (IOException ex) {
+        }
     }
 
     public void register(User u) throws Exception {
@@ -119,6 +122,18 @@ public class ServiceProxy implements IService {
                 throw new Exception("USUARIO YA REGISTRADO");
             }
         } catch (IOException ex) {
+        }
+    }
+
+    public User checkContact(String id) throws Exception {
+        try {
+            out.writeInt(Protocol.CONTACT);
+            out.writeObject(id);
+            out.flush();
+            return null;
+        }
+        catch (IOException ex) {
+            return null;
         }
     }
 
@@ -145,14 +160,37 @@ public class ServiceProxy implements IService {
             try {
                 method = in.readInt();
                 System.out.println("DELIVERY");
-                System.out.println("Operacion: "+method);
+                System.out.println("Operacion: " + method);
                 switch(method){
-                case Protocol.DELIVER:
-                    try {
-                        Message message=(Message)in.readObject();
-                        deliver(message);
-                    } catch (ClassNotFoundException ex) {}
-                    break;
+                    case Protocol.DELIVER:
+                        try {
+                            Message message = (Message)in.readObject();
+                            deliver(message);
+                        }
+                        catch (ClassNotFoundException ex) {}
+                        break;
+                    case Protocol.CONTACT_RESPONSE:
+                        try {
+                            int error = in.readInt();
+                            if (error == Protocol.ERROR_NO_ERROR) {
+                                User u = (User) in.readObject();
+                                contactDeliver(u);
+                            }
+                            else if (error == Protocol.ERROR_CONTACT) {
+                                controller.contactError("USUARIO NO EXISTE");
+                            }
+                        }
+                        catch (Exception ex) {
+                        }
+                        break;
+                    case Protocol.CONTACT_STATUS:
+                        try {
+                            User user = (User)in.readObject();
+                            statusDeliver(user, in.readBoolean());
+                        }
+                        catch (ClassNotFoundException ex) {
+                        }
+                        break;
                 }
                 out.flush();
             } catch (IOException  ex) {
@@ -169,4 +207,22 @@ public class ServiceProxy implements IService {
          }
       );
    }
+
+    private void contactDeliver( final User user ){
+        SwingUtilities.invokeLater(new Runnable(){
+            public void run(){
+                controller.addContact(user);
+            }
+        }
+        );
+    }
+
+    private void statusDeliver(final User user, boolean estado){
+        SwingUtilities.invokeLater(new Runnable(){
+            public void run(){
+                controller.status(user, estado);
+            }
+        }
+        );
+    }
 }

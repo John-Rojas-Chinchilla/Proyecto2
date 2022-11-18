@@ -4,11 +4,14 @@ import chatClient.Application;
 import chatProtocol.Message;
 import chatProtocol.User;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Observer;
 
@@ -29,13 +32,20 @@ public class View implements Observer {
     private JButton buscarButton;
     private JButton contactoButton;
     private JTextField contactoField;
-    private JList contactos;
-    private JLabel contacoLabel;
+
+    //private JList contactos;
+    private JLabel contactoLabel;
+    private JTable contactosTable;
 
     Model model;
     Controller controller;
 
+    int rowSelected;
+
+    // ----------------------------------------------------------------------------
+
     public View() {
+
         loginPanel.setVisible(true);
         Application.window.getRootPane().setDefaultButton(login);
         bodyPanel.setVisible(false);
@@ -64,7 +74,15 @@ public class View implements Observer {
         logout.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.logout();
+                try {
+                    controller.logout();
+                    contactoLabel.setText("Chat");
+                    contactoLabel.setIcon(new ImageIcon());
+                    messages.setText("");
+                }
+                catch (Exception ex) {
+                    JOptionPane.showMessageDialog(panel, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         finish.addActionListener(new ActionListener() {
@@ -76,8 +94,14 @@ public class View implements Observer {
         post.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String text = mensaje.getText();
-                controller.post(text);
+                try {
+                    String text = mensaje.getText();
+                    User receiver = model.getContactos().get(rowSelected);
+                    controller.post(text, receiver);
+                }
+                catch (Exception ex) {
+                    JOptionPane.showMessageDialog(panel, "USUARIO NO ENCONTRADO", "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         registrarButton.addActionListener(new ActionListener() {
@@ -110,7 +134,51 @@ public class View implements Observer {
                 }
             }
         });
+        contactoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    contactoField.setBackground(Color.white);
+                    if(Objects.equals(contactoField.getText(), "") || Objects.equals(contactoField.getText(), model.getCurrentUser().getNombre())) {
+                        throw new Exception("USUARIO INVALIDO");
+                    }
+                    else if (model.getCurrentUser().existContact(contactoField.getText())) {
+                        throw new Exception("CONTACTO YA AGREGADO");
+                    }
+                    controller.checkContact(contactoField.getText());
+                    contactoField.setText("");
+                }
+                catch (Exception ex) {
+                    contactoField.setBackground(Color.orange);
+                    JOptionPane.showMessageDialog(panel, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        contactosTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if(e.getClickCount() == 1 && model.getContactos().size() > 0) {
+                    rowSelected = contactosTable.getSelectedRow();
+                    contactoLabel.setText(model.getContactos().get(rowSelected).getNombre());
+                    //contactoLabel.setIcon(new ImageIcon("image" + (rowSelected + 1)  + ".png"));
+                    model.setMessages(model.getCurrentUser().getChatWith(model.getContactos().get(rowSelected)));
+                    model.commit(Model.USER+Model.CHAT);
+                }
+            }
+        });
+        buscarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    controller.contactSearch(buscarField.getText());
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(panel, "NO SE PUEDO ENCONTRAR", "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
     }
+
+    // ----------------------------------------------------------------------------
 
     public void setModel(Model model) {
         this.model = model;
@@ -125,19 +193,77 @@ public class View implements Observer {
         return panel;
     }
 
+    // ----------------------------------------------------------------------------
+
+    String generateIcon(String letra, int pos) throws IOException {
+        BufferedImage b = new BufferedImage(50,50, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = b.createGraphics();
+
+        // fill all the image with white
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0, 0, 50, 50);
+
+        // create a circle with black
+        int x = (int)(Math.random()*6+1);
+        switch (x) {
+            case 1:
+                g2d.setColor(Color.CYAN);
+                break;
+            case 2:
+                g2d.setColor(Color.GREEN);
+                break;
+            case 3:
+                g2d.setColor(Color.PINK);
+                break;
+            case 4:
+                g2d.setColor(Color.BLUE);
+                break;
+            case 5:
+                g2d.setColor(Color.YELLOW);
+                break;
+            case 6:
+                g2d.setColor(Color.ORANGE);
+                break;
+        }
+        g2d.fillOval(0, 0, 50, 50);
+
+        // create a string with yellow
+        g2d.setColor(Color.BLACK);
+        g2d.drawString(letra, 22, 29);
+
+        // Disposes of this graphics context and releases any system resources that it is using.
+        g2d.dispose();
+
+        File f = new File("image" +  pos + ".png");
+        ImageIO.write(b, "png", f);
+        return f.getPath();
+    }
+
+    // ----------------------------------------------------------------------------
+
     String backStyle = "margin:0px; background-color:#e6e6e6;";
     String senderStyle = "background-color:#c2f0c2;margin-left:30px; margin-right:5px;margin-top:3px; padding:2px; border-radius: 25px;";
     String receiverStyle = "background-color:white; margin-left:5px; margin-right:30px; margin-top:3px; padding:2px;";
 
     public void update(java.util.Observable updatedModel, Object properties) {
 
+        int[] cols = {TableModel.NOMBRE,TableModel.ONLINE};
+        TableModel tabla = new TableModel(model.getContactos(), cols);
+        contactosTable.setModel(tabla);
+        contactosTable.setRowHeight(30);
+        tabla.addCheckBox(TableModel.ONLINE, contactosTable);
+        controller.setEstados(contactosTable);
+        this.panel.revalidate();
+
         int prop = (int) properties;
         if (model.getCurrentUser() == null) {
+            Application.window.setSize(600,400);
             Application.window.setTitle("CHAT");
             loginPanel.setVisible(true);
             Application.window.getRootPane().setDefaultButton(login);
             bodyPanel.setVisible(false);
         } else {
+            Application.window.setSize(700,400);
             Application.window.setTitle(model.getCurrentUser().getNombre().toUpperCase());
             loginPanel.setVisible(false);
             bodyPanel.setVisible(true);
@@ -147,10 +273,10 @@ public class View implements Observer {
                 String text = "";
                 for (Message m : model.getMessages()) {
                     if (m.getSender().equals(model.getCurrentUser())) {
-                        text += ("Me:" + m.getMessage() + "\n");
-                    } else {
+                        text += ("Me: " + m.getMessage() + "\n");
+                    } else if (m.getSender().equals(model.getContactos().get(rowSelected))) {
                         text += (m.getSender().getNombre() + ": " + m.getMessage() + "\n");
-                     }
+                    }
                 }
                 this.messages.setText(text);
             }
@@ -158,5 +284,16 @@ public class View implements Observer {
         }
         panel.validate();
     }
+
+    public void errorContactPane(String message) {
+        JOptionPane.showMessageDialog(panel, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+    }
+
+    /*public void initList() {
+        modelo = new ListModel();
+        listaRender = new ListaRender();
+        contactos.setModel(modelo);
+        contactos.setCellRenderer(listaRender);
+    }*/
 
 }

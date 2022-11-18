@@ -53,25 +53,52 @@ public class Worker {
                 //case Protocol.LOGIN: done on accept
                 case Protocol.LOGOUT:
                     try {
+                        User u = (User)in.readObject();
+                        service.logout(u);
+                        u.setEstado(false);
+                        srv.statusContact(u, false);
                         srv.remove(user);
-                        //service.logout(user); //nothing to do
                     } catch (Exception ex) {}
                     stop();
                     break;                 
                 case Protocol.POST:
-                    Message message = null;
+                    Message message;
                     try {
                         message = (Message)in.readObject();
-                        message.setSender(user);
-                        srv.deliver(message);
-                        //service.post(message); // if wants to save messages, ex. recivier no logged on
+                        service.post(message, null, null);
+                        srv.deliver(message, (User)in.readObject(), (User)in.readObject());
                         System.out.println(user.getNombre()+": "+message.getMessage());
                     } catch (ClassNotFoundException ex) {
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
                     }
-                    break;                     
+                    break;
+                    case Protocol.CONTACT:
+                        try {
+                            User u = service.checkContact((String)in.readObject());
+                            out.writeInt(Protocol.CONTACT_RESPONSE);
+                            out.writeInt(Protocol.ERROR_NO_ERROR);
+                            out.writeObject(u);
+                            out.flush();
+                        }
+                        catch (Exception e) {
+                            out.writeInt(Protocol.CONTACT_RESPONSE);
+                            out.writeInt(Protocol.ERROR_CONTACT);
+                            out.flush();
+                        }
+                        break;
+                    case Protocol.STATUS:
+                        try {
+                            User u = (User)in.readObject();
+                            service.setContactsState(u);
+                            srv.statusContact(u, true);
+                        } catch (Exception ex) {
+                        }
+                        break;
                 }
                 out.flush();
-            } catch (IOException  ex) {
+            }
+            catch (IOException  ex) {
                 System.out.println(ex);
                 continuar = false;
             }                        
@@ -84,6 +111,17 @@ public class Worker {
             out.writeObject(message);
             out.flush();
         } catch (IOException ex) {
+        }
+    }
+
+    public void status(User user, boolean estado) {
+        try {
+            out.writeInt(Protocol.CONTACT_STATUS);
+            out.writeObject(user);
+            out.writeBoolean(estado);
+            out.flush();
+        }
+        catch (Exception ex) {
         }
     }
 }

@@ -12,13 +12,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Model extends java.util.Observable {
+
+    // Atributos
+    // ----------------------------------------------------------------------------
+
     User currentUser;
     List<Message> messages;
+    List<User> contactos;
+
+    // Constructor
+    // ----------------------------------------------------------------------------
 
     public Model() {
        currentUser = null;
        messages= new ArrayList<>();
+       contactos = new ArrayList<>();
     }
+
+    // Getters And Setters
+    // ----------------------------------------------------------------------------
 
     public User getCurrentUser() {
         return currentUser;
@@ -36,6 +48,17 @@ public class Model extends java.util.Observable {
         this.messages = messages;
     }
 
+    public List<User> getContactos() {
+        return contactos;
+    }
+
+    public void setContactos(List<User> contactos) {
+        this.contactos = contactos;
+    }
+
+    // Metodos Especificos
+    // ----------------------------------------------------------------------------
+
     public void addObserver(java.util.Observer o) {
         super.addObserver(o);
         this.commit(Model.USER+Model.CHAT);
@@ -44,8 +67,12 @@ public class Model extends java.util.Observable {
     public void commit(int properties){
         this.setChanged();
         this.notifyObservers(properties);        
-    } 
+    }
+
+    // Atributos Constantes
+    // ----------------------------------------------------------------------------
     
-    public static int USER=1;
-    public static int CHAT=2;
+    public static final int USER = 1;
+    public static final int CHAT = 2;
+    public static final int CONTACT = 3;
 }
