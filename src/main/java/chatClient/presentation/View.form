@@ -3,9 +3,11 @@
   <grid id="27dc6" binding="panel" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="10" left="10" bottom="10" right="10"/>
     <constraints>
-      <xy x="20" y="20" width="681" height="615"/>
+      <xy x="20" y="20" width="704" height="615"/>
     </constraints>
-    <properties/>
+    <properties>
+      <background color="-7086956"/>
+    </properties>
     <border type="none"/>
     <children>
       <grid id="49837" binding="loginPanel" layout-manager="GridLayoutManager" row-count="1" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -13,7 +15,9 @@
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
         </constraints>
-        <properties/>
+        <properties>
+          <background color="-7086956"/>
+        </properties>
         <border type="none"/>
         <children>
           <component id="ea979" class="javax.swing.JLabel">
@@ -79,7 +83,9 @@
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
-        <properties/>
+        <properties>
+          <background color="-7086956"/>
+        </properties>
         <border type="none"/>
         <children>
           <grid id="36318" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -87,15 +93,19 @@
             <constraints>
               <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
-            <properties/>
+            <properties>
+              <background color="-7086956"/>
+            </properties>
             <border type="none"/>
             <children>
               <grid id="2104f" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
+                <margin top="10" left="10" bottom="10" right="10"/>
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="9" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties/>
+                <properties>
+                  <background color="-7086956"/>
+                </properties>
                 <border type="none"/>
                 <children>
                   <component id="8f2ac" class="javax.swing.JTextField" binding="mensaje">
@@ -124,12 +134,16 @@
                     <maximum-size width="300" height="250"/>
                   </grid>
                 </constraints>
-                <properties/>
+                <properties>
+                  <background color="-7086956"/>
+                </properties>
                 <border type="none"/>
                 <children>
                   <component id="efdba" class="javax.swing.JTextPane" binding="messages">
                     <constraints/>
-                    <properties/>
+                    <properties>
+                      <background color="-7812215"/>
+                    </properties>
                   </component>
                 </children>
               </scrollpane>
@@ -156,7 +170,9 @@
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
-            <properties/>
+            <properties>
+              <background color="-7086956"/>
+            </properties>
             <border type="none"/>
             <children>
               <grid id="8308d" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
@@ -164,7 +180,9 @@
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties/>
+                <properties>
+                  <background color="-7086956"/>
+                </properties>
                 <border type="none"/>
                 <children>
                   <component id="131b5" class="javax.swing.JButton" binding="contactoButton" default-binding="true">
@@ -189,23 +207,34 @@
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
-                <properties/>
+                <properties>
+                  <background color="-7812215"/>
+                  <foreground color="-1"/>
+                </properties>
                 <border type="none"/>
                 <children>
                   <component id="956de" class="javax.swing.JTable" binding="contactosTable">
                     <constraints/>
-                    <properties/>
+                    <properties>
+                      <background color="-1"/>
+                      <foreground color="-16777216"/>
+                      <gridColor color="-1509889"/>
+                      <selectionBackground color="-11228256"/>
+                      <selectionForeground color="-1"/>
+                    </properties>
                   </component>
                 </children>
               </scrollpane>
             </children>
           </grid>
           <grid id="5c721" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-            <margin top="0" left="0" bottom="0" right="0"/>
+            <margin top="10" left="10" bottom="10" right="10"/>
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>
-            <properties/>
+            <properties>
+              <background color="-7086956"/>
+            </properties>
             <border type="none"/>
             <children>
               <component id="568d2" class="javax.swing.JTextField" binding="buscarField">

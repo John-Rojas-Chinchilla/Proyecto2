@@ -63,11 +63,13 @@ public class View implements Observer {
                     controller.login(u);
                     id.setText("");
                     clave.setText("");
+                    messages.setText("");
                 } catch (Exception ex) {
                     id.setBackground(Color.orange);
                     id.setToolTipText("Nombre Invalido");
                     clave.setBackground(Color.orange);
                     clave.setToolTipText("Clave Invalida");
+                    messages.setText("");
                 }
             }
         });
@@ -207,7 +209,7 @@ public class View implements Observer {
         TableModel tabla;
         tabla = new TableModel(model.getContactos(), cols);
 
-        messages.setBackground(new Color(0xE6E6E6));
+        messages.setBackground(new Color(0x88CB89));
         contactosTable.setModel(tabla);
         tabla.addImage(contactosTable);
         contactosTable.setRowHeight(30);
