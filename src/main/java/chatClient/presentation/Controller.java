@@ -81,13 +81,15 @@ public class Controller {
     }
         
     public void deliver(Message message) {
-        if(model.getCurrentUser().isContact(message.getSender())) {
+        /*if(model.getCurrentUser().isContact(message.getSender())) {
             model.getCurrentUser().getChats().add(message);
-        }
-        else if (!Objects.equals(model.getCurrentUser().getId(), message.getSender().getId())) {
-            model.getCurrentUser().getContactos().add(message.getSender());
-            model.getContactos().add(message.getSender());
-        }
+        }*/
+        //if (!Objects.equals(model.getCurrentUser().getId(), message.getSender().getId())) {
+            //model.getCurrentUser().getContactos().add(message.getSender());
+            //model.getContactos().add(message.getSender());
+
+        //}
+        model.getCurrentUser().getChats().add(message);
         model.messages.add(message);
         model.commit(Model.CHAT);
     }
