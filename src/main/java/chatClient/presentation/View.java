@@ -161,7 +161,7 @@ public class View implements Observer {
                 if(e.getClickCount() == 1 && model.getContactos().size() > 0) {
                     rowSelected = contactosTable.getSelectedRow();
                     contactoLabel.setText(model.getContactos().get(rowSelected).getNombre());
-                    //contactoLabel.setIcon(new ImageIcon("image" + (rowSelected + 1)  + ".png"));
+                    contactoLabel.setIcon(new ImageIcon("image" + model.getContactos().get(rowSelected).getId() + ".png"));
                     model.setMessages(model.getCurrentUser().getChatWith(model.getContactos().get(rowSelected)));
                     model.commit(Model.USER+Model.CHAT);
                 }
@@ -204,14 +204,20 @@ public class View implements Observer {
 
     public void update(java.util.Observable updatedModel, Object properties) {
         int[] cols = {TableModel.IMAGE,TableModel.NOMBRE,TableModel.ONLINE};
-        TableModel tabla = null;
+        TableModel tabla;
         tabla = new TableModel(model.getContactos(), cols);
 
+        messages.setBackground(new Color(0xE6E6E6));
         contactosTable.setModel(tabla);
         tabla.addImage(contactosTable);
         contactosTable.setRowHeight(30);
         tabla.addCheckBox(TableModel.ONLINE, contactosTable);
         controller.setEstados(contactosTable);
+        contactosTable.getColumnModel().getColumn(0).setPreferredWidth(34);
+        contactosTable.getColumnModel().getColumn(1).setPreferredWidth(250);
+        contactosTable.getColumnModel().getColumn(2).setPreferredWidth(34);
+        contactosTable.setBackground(Color.WHITE);
+
         this.panel.revalidate();
 
         int prop = (int) properties;
@@ -247,12 +253,5 @@ public class View implements Observer {
     public void errorContactPane(String message) {
         JOptionPane.showMessageDialog(panel, message, "ERROR", JOptionPane.ERROR_MESSAGE);
     }
-
-    /*public void initList() {
-        modelo = new ListModel();
-        listaRender = new ListaRender();
-        contactos.setModel(modelo);
-        contactos.setCellRenderer(listaRender);
-    }*/
 
 }

@@ -69,22 +69,23 @@ public class TableModel extends AbstractTableModel implements javax.swing.table.
         TableColumn tc = table.getColumnModel().getColumn(0);
         table.setDefaultRenderer(JLabel.class,new IconCellRenderer());
         table.getColumnModel().getColumn(0).setCellRenderer(new IconCellRenderer());
-        //tc.setCellEditor(table.getDefaultEditor(Object.class));
-        //tc.setCellRenderer(table.getDefaultRenderer(Object.class));
-        ImageIcon icon1 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/logo.png")));
+        //ImageIcon icon1 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/logo.png")));
         //Object[] fila = new Object[2];
-        table.setValueAt(new JLabel(icon1), 0, 0);
-
+        ///table.setValueAt(new JLabel(icon1), 0, 0);
     }
 
     @Override
     public Object getValueAt(int row, int col) {
 
-        User u = new User();
-        if(col != 0) {
-            u = rows.get(row);
+        User u = rows.get(row);
+        ImageIcon icon1;
+
+        try {
+            icon1 = new ImageIcon(generateIcon(u.getNombre(), u.getId()));
+        } catch (Exception e) {
+            icon1 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/logo.png")));
         }
-        ImageIcon icon1 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/logo.png")));
+
         switch (cols[col])
         {
             //case ICON: return c.getId();
@@ -129,46 +130,45 @@ public class TableModel extends AbstractTableModel implements javax.swing.table.
         colNames[ONLINE] = "";
     }
 
-    String generateIcon(String letra,int pos) throws IOException {
-        BufferedImage b = new BufferedImage(50,50, BufferedImage.TYPE_INT_RGB);
+    String generateIcon(String nombre, String id) throws IOException {
+        BufferedImage b = new BufferedImage(30,30, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = b.createGraphics();
 
-        // fill all the image with white
-        g2d.setColor(Color.WHITE);
-        g2d.fillRect(0, 0, 50, 50);
+
 
         // create a circle with black
         int x = (int)(Math.random()*6+1);
         switch (x) {
             case 1:
-                g2d.setColor(Color.CYAN);
+                g2d.setColor(new Color(0x34C56E));
                 break;
             case 2:
-                g2d.setColor(Color.GREEN);
+                g2d.setColor(new Color(0x8434C5));
                 break;
             case 3:
-                g2d.setColor(Color.PINK);
+                g2d.setColor(new Color(0x3489C5));
                 break;
             case 4:
-                g2d.setColor(Color.BLUE);
+                g2d.setColor(new Color(0xC5348B));
                 break;
             case 5:
-                g2d.setColor(Color.YELLOW);
+                g2d.setColor(new Color(0xC59C34));
                 break;
             case 6:
-                g2d.setColor(Color.ORANGE);
+                g2d.setColor(new Color(0xC5344F));
                 break;
         }
-        g2d.fillOval(0, 0, 50, 50);
+        g2d.fillRect(0, 0, 30, 30);
+        //g2d.fillOval(0, 0, 30, 30);
 
         // create a string with yellow
         g2d.setColor(Color.BLACK);
-        g2d.drawString(letra, 22, 29);
+        g2d.drawString(String.valueOf(nombre.charAt(0)), 11, 19);
 
         // Disposes of this graphics context and releases any system resources that it is using.
         g2d.dispose();
 
-        File f = new File("image" +  pos + ".png");
+        File f = new File("image" + id + ".png");
         ImageIO.write(b, "png", f);
         return f.getPath();
     }
