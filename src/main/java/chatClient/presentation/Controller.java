@@ -10,6 +10,7 @@ import chatServer.Service;
 import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Controller {
     View view;
@@ -79,9 +80,15 @@ public class Controller {
         }
     }
         
-    public void deliver(Message message){
+    public void deliver(Message message) {
+        if(model.getCurrentUser().isContact(message.getSender())) {
+            model.getCurrentUser().getChats().add(message);
+        }
+        else if (!Objects.equals(model.getCurrentUser().getId(), message.getSender().getId())) {
+            model.getCurrentUser().getContactos().add(message.getSender());
+            model.getContactos().add(message.getSender());
+        }
         model.messages.add(message);
-        model.getCurrentUser().getChats().add(message);
         model.commit(Model.CHAT);
     }
 
