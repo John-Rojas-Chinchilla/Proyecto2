@@ -146,6 +146,7 @@ public class View implements Observer {
                         throw new Exception("CONTACTO YA AGREGADO");
                     }
                     controller.checkContact(contactoField.getText());
+
                     contactoField.setText("");
                 }
                 catch (Exception ex) {
@@ -195,50 +196,6 @@ public class View implements Observer {
 
     // ----------------------------------------------------------------------------
 
-    String generateIcon(String letra, int pos) throws IOException {
-        BufferedImage b = new BufferedImage(50,50, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g2d = b.createGraphics();
-
-        // fill all the image with white
-        g2d.setColor(Color.WHITE);
-        g2d.fillRect(0, 0, 50, 50);
-
-        // create a circle with black
-        int x = (int)(Math.random()*6+1);
-        switch (x) {
-            case 1:
-                g2d.setColor(Color.CYAN);
-                break;
-            case 2:
-                g2d.setColor(Color.GREEN);
-                break;
-            case 3:
-                g2d.setColor(Color.PINK);
-                break;
-            case 4:
-                g2d.setColor(Color.BLUE);
-                break;
-            case 5:
-                g2d.setColor(Color.YELLOW);
-                break;
-            case 6:
-                g2d.setColor(Color.ORANGE);
-                break;
-        }
-        g2d.fillOval(0, 0, 50, 50);
-
-        // create a string with yellow
-        g2d.setColor(Color.BLACK);
-        g2d.drawString(letra, 22, 29);
-
-        // Disposes of this graphics context and releases any system resources that it is using.
-        g2d.dispose();
-
-        File f = new File("image" +  pos + ".png");
-        ImageIO.write(b, "png", f);
-        return f.getPath();
-    }
-
     // ----------------------------------------------------------------------------
 
     String backStyle = "margin:0px; background-color:#e6e6e6;";
@@ -246,10 +203,12 @@ public class View implements Observer {
     String receiverStyle = "background-color:white; margin-left:5px; margin-right:30px; margin-top:3px; padding:2px;";
 
     public void update(java.util.Observable updatedModel, Object properties) {
+        int[] cols = {TableModel.IMAGE,TableModel.NOMBRE,TableModel.ONLINE};
+        TableModel tabla = null;
+        tabla = new TableModel(model.getContactos(), cols);
 
-        int[] cols = {TableModel.NOMBRE,TableModel.ONLINE};
-        TableModel tabla = new TableModel(model.getContactos(), cols);
         contactosTable.setModel(tabla);
+        tabla.addImage(contactosTable);
         contactosTable.setRowHeight(30);
         tabla.addCheckBox(TableModel.ONLINE, contactosTable);
         controller.setEstados(contactosTable);
