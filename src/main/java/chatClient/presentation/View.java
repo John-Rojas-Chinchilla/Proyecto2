@@ -169,7 +169,11 @@ public class View implements Observer {
         buscarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                try {
+                    controller.contactSearch(buscarField.getText());
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(panel, "NO SE PUEDO ENCONTRAR", "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
     }

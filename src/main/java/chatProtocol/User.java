@@ -159,4 +159,8 @@ public class User implements Serializable {
         return null;
     }
 
+    public List<User> getByNombre(String filtro) {
+        return contactos.stream().filter(e->e.getNombre().contains(filtro)).collect(Collectors.toList());
+    }
+
 }

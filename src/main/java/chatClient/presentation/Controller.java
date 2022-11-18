@@ -122,6 +122,8 @@ public class Controller {
     }
 
     public void contactSearch(String nombre) throws IOException {
+        model.setContactos(model.getCurrentUser().contactosSearch(nombre));
+        model.commit(Model.CHAT);
     }
 
     public void setEstados(JTable table) {
