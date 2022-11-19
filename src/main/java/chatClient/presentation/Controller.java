@@ -65,7 +65,7 @@ public class Controller {
         
     public void deliver(Message message) {
         model.getCurrentUser().getChats().add(message);
-        model.messages.add(message);
+        model.setMessages(model.getCurrentUser().getChats());
         model.commit(Model.CHAT);
     }
 

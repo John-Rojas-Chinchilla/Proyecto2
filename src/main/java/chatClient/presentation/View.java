@@ -256,7 +256,7 @@ public class View implements Observer {
                     this.messages.setText("");
                     String text = "";
                     for (Message m : model.getMessages()) {
-                        if (m.getSender().equals(model.getCurrentUser()) && rowSelected != -1) {
+                        if (m.getSender().equals(model.getCurrentUser()) && rowSelected != -1 && m.getReceiver().equals(model.getContactos().get(rowSelected))) {
                             text += ("Me: " + m.getMessage() + "\n");
                         } else if (m.getSender().equals(model.getContactos().get(rowSelected))) {
                             text += (m.getSender().getNombre() + ": " + m.getMessage() + "\n");
