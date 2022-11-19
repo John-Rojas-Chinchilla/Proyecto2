@@ -98,9 +98,16 @@ public class View implements Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    mensaje.setBackground(Color.white);
+                    mensaje.setToolTipText("");
                     if(model.getContactos().size() == 0 || rowSelected == -1) {
                         mensaje.setText("");
                         throw new Exception("CONTACTO NO ENCONTRADO");
+                    }
+                    else if(Objects.equals(mensaje.getText(), "")){
+                        mensaje.setBackground(Color.orange);
+                        mensaje.setToolTipText("Ingrese un mensaje valido");
+                        throw new Exception("MENSAJE INVALIDO");
                     }
                     String text = mensaje.getText();
                     User receiver = model.getContactos().get(rowSelected);
@@ -146,6 +153,7 @@ public class View implements Observer {
             public void actionPerformed(ActionEvent e) {
                 try {
                     contactoField.setBackground(Color.white);
+                    contactoField.setToolTipText("");
                     if(Objects.equals(contactoField.getText(), "") || Objects.equals(contactoField.getText(), model.getCurrentUser().getNombre())) {
                         throw new Exception("USUARIO INVALIDO");
                     }
@@ -153,13 +161,13 @@ public class View implements Observer {
                         throw new Exception("CONTACTO YA AGREGADO");
                     }
                     controller.checkContact(contactoField.getText());
-
-                    contactoField.setText("");
                 }
                 catch (Exception ex) {
                     contactoField.setBackground(Color.orange);
+                    contactoField.setToolTipText("Ingrese un Contacto Valido");
                     JOptionPane.showMessageDialog(panel, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
+                contactoField.setText("");
             }
         });
         contactosTable.addMouseListener(new MouseAdapter() {
