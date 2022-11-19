@@ -92,17 +92,6 @@ public class Server {
         }
     }
     
-    private User login(ObjectInputStream in,ObjectOutputStream out,IService service) throws IOException, ClassNotFoundException, Exception{
-        int method = in.readInt();
-        if (method!=Protocol.LOGIN) throw new Exception("Should login first");
-        User user=(User)in.readObject();                          
-        user = service.login(user);
-        out.writeInt(Protocol.ERROR_NO_ERROR);
-        out.writeObject(user);
-        out.flush();
-        return user;
-    }
-    
     public void deliver(Message message, User receiver, User sender){
         for(Worker wk:workers){
             if (Objects.equals(wk.user.getId(), receiver.getId()) || Objects.equals(wk.user.getId(), sender.getId())){

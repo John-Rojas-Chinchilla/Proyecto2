@@ -10,7 +10,6 @@ import chatServer.Service;
 import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Controller {
     View view;
@@ -35,10 +34,6 @@ public class Controller {
         model.setContactos(logged.getContactos());
         model.setCurrentUser(logged);
 
-        /*for(int i = 0; i < model.getContactos().size(); i++) {
-            view.modelo.add(new ListModelItem(model.getContactos().get(i).getNombre(), new ImageIcon(view.generateIcon(String.valueOf(model.getContactos().get(i).getNombre().charAt(0)), i + 1))));
-        }*/
-
         if(!Service.instance().isUser(model.getCurrentUser())) {
             Service.instance().getData().getUsers().add(model.getCurrentUser());
         }
@@ -58,18 +53,6 @@ public class Controller {
             ServiceProxy.instance().logout(model.getCurrentUser());
             ServiceProxy.instance().setContactsState(model.getCurrentUser());
             Service.instance().store(model.getCurrentUser().getId());
-
-            /*for (int i = 1; i < model.getContactos().size() + 1; i++) {
-                String fileName = "image" + i + ".png";
-                Path path = Paths.get(fileName);
-                try {
-                    Files.delete(path);
-                }
-                catch (IOException ex) {
-                    throw new Exception("ERROR");
-                }
-            }*/
-
             model.setMessages(new ArrayList<>());
             model.setContactos(new ArrayList<>());
             model.setCurrentUser(null);
@@ -81,14 +64,6 @@ public class Controller {
     }
         
     public void deliver(Message message) {
-        /*if(model.getCurrentUser().isContact(message.getSender())) {
-            model.getCurrentUser().getChats().add(message);
-        }*/
-        //if (!Objects.equals(model.getCurrentUser().getId(), message.getSender().getId())) {
-            //model.getCurrentUser().getContactos().add(message.getSender());
-            //model.getContactos().add(message.getSender());
-
-        //}
         model.getCurrentUser().getChats().add(message);
         model.messages.add(message);
         model.commit(Model.CHAT);
@@ -98,7 +73,6 @@ public class Controller {
         if(model.getCurrentUser().isContact(user)) {
             model.getCurrentUser().getById(user.getId()).setEstado(estado);
         }
-
         model.commit(Model.CHAT);
     }
 
@@ -106,8 +80,8 @@ public class Controller {
         ServiceProxy.instance().register(u);
     }
 
-    public User checkContact(String id) throws Exception {
-        return ServiceProxy.instance().checkContact(id);
+    public void checkContact(String id) throws Exception {
+        ServiceProxy.instance().checkContact(id);
     }
 
     public void addContact(User user) {
@@ -120,10 +94,10 @@ public class Controller {
             if(!Service.instance().isUser(user)) {
                 Service.instance().getData().getUsers().add(user);
             }
-            //view.modelo.add(new ListModelItem(model.getContactos().get(model.getContactos().size() - 1).getNombre(), new ImageIcon(view.generateIcon(String.valueOf(user.getNombre().charAt(0)), model.getContactos().size()))));
             model.commit(Model.CHAT + Model.CONTACT);
         }
-        catch (Exception ex) {}
+        catch (Exception ignored) {
+        }
     }
 
     public void contactError(String message) {
@@ -142,3 +116,20 @@ public class Controller {
         }
     }
 }
+
+
+
+/*  Posible cuerpo de un método, que borra los iconos creados (los archivos .png).
+
+            for (int i = 0; i < model.getContactos().size(); i++) {
+                String fileName = "image" + model.getContactos().get(i).getId() + ".png";
+                Path path = Paths.get(fileName);
+                try {
+                    Files.delete(path);
+                }
+                catch (IOException ex) {
+                    throw new Exception("ERROR");
+                }
+            }
+
+            */

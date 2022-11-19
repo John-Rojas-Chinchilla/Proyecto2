@@ -27,12 +27,6 @@ public class Service implements IService {
 
     private Service() {
         data = new Data();
-        /*try {
-            //data = XmlPersister.instance("").load();
-        }
-        catch (Exception e) {
-            data = new Data();
-        }*/
         usuarioDao = new UsuarioDao();
         messageDao = new MessageDao();
     }

@@ -18,11 +18,11 @@ public class ServiceProxy implements IService {
     // Atributos
     // ----------------------------------------------------------------------------
 
-    Socket skt; // Objeto Interfaz o unión entre la aplicacion y la red
-    ObjectInputStream in; // Canal de entrada - recibe los datos
-    ObjectOutputStream out; // Canal de salida - envia los datos
-    Controller controller; // Controller de la capa "Presentación" - Ayudará a actualizar la app
-    private static IService theInstance; // Interfaz
+    Socket skt;
+    ObjectInputStream in;
+    ObjectOutputStream out;
+    Controller controller;
+    private static IService theInstance;
     boolean continuar;
 
     // Constructor
@@ -50,15 +50,15 @@ public class ServiceProxy implements IService {
     // ----------------------------------------------------------------------------
 
     private void connect() throws Exception{
-        skt = new Socket(Protocol.SERVER,Protocol.PORT); // new Socket(servidor, puerto);
-        out = new ObjectOutputStream(skt.getOutputStream()); // salida de datos que obtiene la salida de datos del Socket
-        out.flush(); // Envia los datos
-        in = new ObjectInputStream(skt.getInputStream()); // entrada de datos que obtiene la entrada de datos del Socket
+        skt = new Socket(Protocol.SERVER,Protocol.PORT);
+        out = new ObjectOutputStream(skt.getOutputStream());
+        out.flush();
+        in = new ObjectInputStream(skt.getInputStream());
     }
 
     private void disconnect() throws Exception {
-        skt.shutdownOutput(); // Desactiva la salida de datos
-        skt.close(); // Cierra y Desactiva el Socket
+        skt.shutdownOutput();
+        skt.close();
     }
     
     public User login(User u) throws Exception {

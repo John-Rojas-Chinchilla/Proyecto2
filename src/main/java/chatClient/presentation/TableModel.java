@@ -59,19 +59,10 @@ public class TableModel extends AbstractTableModel implements javax.swing.table.
         tc.setCellRenderer(table.getDefaultRenderer(Boolean.class));
     }
 
-   /* @Override
-    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-
-        super.setValueAt(aValue, rowIndex, columnIndex);
-    }*/
-
     public void addImage(JTable table){
         TableColumn tc = table.getColumnModel().getColumn(0);
         table.setDefaultRenderer(JLabel.class,new IconCellRenderer());
         table.getColumnModel().getColumn(0).setCellRenderer(new IconCellRenderer());
-        //ImageIcon icon1 = new ImageIcon(Objects.requireNonNull(getClass().getResource("/logo.png")));
-        //Object[] fila = new Object[2];
-        ///table.setValueAt(new JLabel(icon1), 0, 0);
     }
 
     @Override
@@ -96,32 +87,6 @@ public class TableModel extends AbstractTableModel implements javax.swing.table.
         }
     }
 
-    /*public DefaultTableModel PropiedadesTable(JTable table) {
-
-        //table.setDefaultRenderer(Object.class, new RenderIm);
-
-        jTable1.setDefaultRenderer(Object.class,new IconCellRenderer());
-        ImageIcon icon1 = new ImageIcon(getClass().getResource("/Recursos/logo.png"));
-        Object[] fila = new Object[2];
-        for (int i = 0; i < 10; i++) {
-            table.setValueAt(fila[0] = new JLabel(icon1), i, 0);
-            table.setValueAt("Contenido", i, 1);
-            table.setValueAt("Contenido", i, 2);
-        }
-        /*int i = 0;
-        DefaultTableModel tm = new DefaultTableModel(null, colNames);
-        if (rows != null) {
-            for (User u : rows) {
-                String path = generateIcon(u.getNombre().substring(0, 1), i);
-                //String nombre = (String) getValueAt(, NOMBRE);
-                //boolean estado = (boolean) getValueAt(row, ONLINE);
-                tm.addRow(new Object[]{u.getNombre(), u.getEstado(), new JLabel(new ImageIcon(getClass().getResource(path)))});
-                i++;
-                return tm;
-            }
-        }
-        return tm;
-    }*/
     // ---------------------------------------------------------------------------------------------
 
     public void initColNames() {
@@ -133,8 +98,6 @@ public class TableModel extends AbstractTableModel implements javax.swing.table.
     String generateIcon(String nombre, String id) throws IOException {
         BufferedImage b = new BufferedImage(30,30, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2d = b.createGraphics();
-
-
 
         // create a circle with black
         int x = (int)(Math.random()*6+1);

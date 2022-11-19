@@ -73,11 +73,7 @@ public class MessageDao {
         PreparedStatement stm = database.prepareStatement(sql);
         stm.setString(1, m);
 
-        int count = database.executeUpdate(stm);
-
-        /*if (count == 0) {
-            throw new Exception("USER NO EXISTE");
-        }*/
+        database.executeUpdate(stm);
     }
 
     public List<Message> findByReceiver(String id) throws Exception {
@@ -100,8 +96,6 @@ public class MessageDao {
         m.setMessage(rs.getString(alias + ".message"));
         m.setSender(u.read(rs.getString(alias + ".sender")));
         m.setReceiver(u.read(rs.getString(alias + ".receiver")));
-        //m.setSender(u.from(rs, "u"));
-        // m.setReceiver(u.from(rs, "u"));
         return m;
     }
 }
