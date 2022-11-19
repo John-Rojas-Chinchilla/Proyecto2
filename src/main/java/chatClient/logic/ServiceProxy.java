@@ -56,12 +56,12 @@ public class ServiceProxy implements IService {
         in = new ObjectInputStream(skt.getInputStream()); // entrada de datos que obtiene la entrada de datos del Socket
     }
 
-    private void disconnect() throws Exception{
+    private void disconnect() throws Exception {
         skt.shutdownOutput(); // Desactiva la salida de datos
         skt.close(); // Cierra y Desactiva el Socket
     }
     
-    public User login(User u) throws Exception{
+    public User login(User u) throws Exception {
         connect();
         try {
             out.writeInt(Protocol.LOGIN);
@@ -73,13 +73,14 @@ public class ServiceProxy implements IService {
                 this.start();
                 return u1;
             }
-            else {
+            else if (response == Protocol.ERROR_LOGIN) {
                 disconnect();
-                throw new Exception("No remote user");
+                throw new Exception("USUARIO NO REGISTRADO");
             }            
         } catch (IOException | ClassNotFoundException ex) {
             return null;
         }
+        return null;
     }
     
     public void logout(User u) throws Exception {

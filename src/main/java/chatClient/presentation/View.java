@@ -78,7 +78,7 @@ public class View implements Observer {
             public void actionPerformed(ActionEvent e) {
                 try {
                     controller.logout();
-                    contactoLabel.setText("Chat");
+                    contactoLabel.setText("");
                     contactoLabel.setIcon(new ImageIcon());
                     messages.setText("");
                 }
@@ -215,16 +215,16 @@ public class View implements Observer {
         contactosTable.setRowHeight(30);
         tabla.addCheckBox(TableModel.ONLINE, contactosTable);
         controller.setEstados(contactosTable);
-        contactosTable.getColumnModel().getColumn(0).setPreferredWidth(34);
+        contactosTable.getColumnModel().getColumn(0).setPreferredWidth(33);
         contactosTable.getColumnModel().getColumn(1).setPreferredWidth(250);
-        contactosTable.getColumnModel().getColumn(2).setPreferredWidth(34);
+        contactosTable.getColumnModel().getColumn(2).setPreferredWidth(33);
         contactosTable.setBackground(Color.WHITE);
 
         this.panel.revalidate();
 
         int prop = (int) properties;
         if (model.getCurrentUser() == null) {
-            Application.window.setSize(600,500);
+            Application.window.setSize(600,300);
             Application.window.setTitle("CHAT");
             loginPanel.setVisible(true);
             Application.window.getRootPane().setDefaultButton(login);
