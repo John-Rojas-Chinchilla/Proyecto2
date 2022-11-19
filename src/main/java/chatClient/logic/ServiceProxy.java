@@ -63,22 +63,18 @@ public class ServiceProxy implements IService {
     
     public User login(User u) throws Exception {
         connect();
-        try {
-            out.writeInt(Protocol.LOGIN);
-            out.writeObject(u);
-            out.flush();
-            int response = in.readInt();
-            if (response == Protocol.ERROR_NO_ERROR){
-                User u1 = (User) in.readObject();
-                this.start();
-                return u1;
-            }
-            else if (response == Protocol.ERROR_LOGIN) {
-                disconnect();
-                throw new Exception("USUARIO NO REGISTRADO");
-            }            
-        } catch (IOException | ClassNotFoundException ex) {
-            return null;
+        out.writeInt(Protocol.LOGIN);
+        out.writeObject(u);
+        out.flush();
+        int response = in.readInt();
+        if (response == Protocol.ERROR_NO_ERROR){
+            User u1 = (User) in.readObject();
+            this.start();
+            return u1;
+        }
+        else if (response == Protocol.ERROR_LOGIN) {
+            disconnect();
+            throw new Exception("USUARIO O CONTRASEÑA INCORRECTO");
         }
         return null;
     }

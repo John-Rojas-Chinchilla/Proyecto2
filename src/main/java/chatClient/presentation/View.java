@@ -70,6 +70,7 @@ public class View implements Observer {
                     clave.setBackground(Color.orange);
                     clave.setToolTipText("Clave Invalida");
                     messages.setText("");
+                    JOptionPane.showMessageDialog(panel, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -131,7 +132,7 @@ public class View implements Observer {
                     JTextField nombre = new JTextField("");
                     Object[] fields = {"Nombre:", nombre};
                     int option = JOptionPane.showConfirmDialog(panel, fields, id.getText(), JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
-                    if (option == JOptionPane.OK_OPTION) {
+                    if (option == JOptionPane.OK_OPTION && !Objects.equals(nombre.getText(), "")) {
                         try {
                             controller.register(new User(id.getText(), new String(clave.getPassword()), nombre.getText()));
                             JOptionPane.showMessageDialog(panel, "USUARIO REGISTRADO");
@@ -139,12 +140,16 @@ public class View implements Observer {
                             JOptionPane.showMessageDialog(panel, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
                         }
                     }
+                    else if (option != JOptionPane.OK_CANCEL_OPTION) {
+                        throw new Exception("NOMBRE INVALIDO");
+                    }
                 }
                 catch (Exception ex) {
                     id.setBackground(Color.orange);
                     id.setToolTipText("Ingrese un nombre valido");
                     clave.setBackground(Color.orange);
                     clave.setToolTipText("Ingrese una clave valida");
+                    JOptionPane.showMessageDialog(panel, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

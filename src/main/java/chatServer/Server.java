@@ -47,7 +47,11 @@ public class Server {
                 switch (method) {
                     case Protocol.LOGIN:
                         try {
-                            User user = service.login((User)in.readObject());
+                            User pet = (User)in.readObject();
+                            User user = service.login(pet);
+                            if(user == null || !Objects.equals(pet.getClave(), user.getClave())) {
+                                throw new Exception();
+                            }
                             out.writeInt(Protocol.ERROR_NO_ERROR);
                             out.writeObject(user);
                             out.flush();
