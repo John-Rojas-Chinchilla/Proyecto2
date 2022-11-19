@@ -36,6 +36,8 @@ public class View implements Observer {
     //private JList contactos;
     private JLabel contactoLabel;
     private JTable contactosTable;
+    private JPanel logoPanel;
+    private JPanel loginPanel2;
 
     Model model;
     Controller controller;
@@ -82,6 +84,7 @@ public class View implements Observer {
                     contactoLabel.setText("");
                     contactoLabel.setIcon(new ImageIcon());
                     messages.setText("");
+                    buscarField.setText("");
                     rowSelected = -1;
                 }
                 catch (Exception ex) {
@@ -244,12 +247,16 @@ public class View implements Observer {
                 Application.window.setSize(600, 300);
                 Application.window.setTitle("CHAT");
                 loginPanel.setVisible(true);
+                loginPanel2.setVisible(true);
+                logoPanel.setVisible(true);
                 Application.window.getRootPane().setDefaultButton(login);
                 bodyPanel.setVisible(false);
             } else {
                 Application.window.setSize(700, 500);
                 Application.window.setTitle(model.getCurrentUser().getNombre().toUpperCase());
                 loginPanel.setVisible(false);
+                loginPanel2.setVisible(false);
+                logoPanel.setVisible(false);
                 bodyPanel.setVisible(true);
                 Application.window.getRootPane().setDefaultButton(post);
                 if ((prop & Model.CHAT) == Model.CHAT) {
