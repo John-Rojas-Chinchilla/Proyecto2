@@ -40,7 +40,7 @@ public class View implements Observer {
     Model model;
     Controller controller;
 
-    int rowSelected;
+    int rowSelected = -1;
 
     // ----------------------------------------------------------------------------
 
@@ -81,6 +81,7 @@ public class View implements Observer {
                     contactoLabel.setText("");
                     contactoLabel.setIcon(new ImageIcon());
                     messages.setText("");
+                    rowSelected = -1;
                 }
                 catch (Exception ex) {
                     JOptionPane.showMessageDialog(panel, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
@@ -97,12 +98,16 @@ public class View implements Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    if(model.getContactos().size() == 0 || rowSelected == -1) {
+                        mensaje.setText("");
+                        throw new Exception("CONTACTO NO ENCONTRADO");
+                    }
                     String text = mensaje.getText();
                     User receiver = model.getContactos().get(rowSelected);
                     controller.post(text, receiver);
                 }
                 catch (Exception ex) {
-                    JOptionPane.showMessageDialog(panel, "USUARIO NO ENCONTRADO", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(panel, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -198,58 +203,60 @@ public class View implements Observer {
 
     // ----------------------------------------------------------------------------
 
-    // ----------------------------------------------------------------------------
-
     String backStyle = "margin:0px; background-color:#e6e6e6;";
     String senderStyle = "background-color:#c2f0c2;margin-left:30px; margin-right:5px;margin-top:3px; padding:2px; border-radius: 25px;";
     String receiverStyle = "background-color:white; margin-left:5px; margin-right:30px; margin-top:3px; padding:2px;";
 
     public void update(java.util.Observable updatedModel, Object properties) {
-        int[] cols = {TableModel.IMAGE,TableModel.NOMBRE,TableModel.ONLINE};
-        TableModel tabla;
-        tabla = new TableModel(model.getContactos(), cols);
+        try {
+            int[] cols = {TableModel.IMAGE, TableModel.NOMBRE, TableModel.ONLINE};
+            TableModel tabla;
+            tabla = new TableModel(model.getContactos(), cols);
 
-        messages.setBackground(new Color(0x88CB89));
-        contactosTable.setModel(tabla);
-        tabla.addImage(contactosTable);
-        contactosTable.setRowHeight(30);
-        tabla.addCheckBox(TableModel.ONLINE, contactosTable);
-        controller.setEstados(contactosTable);
-        contactosTable.getColumnModel().getColumn(0).setPreferredWidth(33);
-        contactosTable.getColumnModel().getColumn(1).setPreferredWidth(250);
-        contactosTable.getColumnModel().getColumn(2).setPreferredWidth(33);
-        contactosTable.setBackground(Color.WHITE);
+            messages.setBackground(new Color(0x88CB89));
+            contactosTable.setModel(tabla);
+            tabla.addImage(contactosTable);
+            contactosTable.setRowHeight(30);
+            tabla.addCheckBox(TableModel.ONLINE, contactosTable);
+            controller.setEstados(contactosTable);
+            contactosTable.getColumnModel().getColumn(0).setPreferredWidth(33);
+            contactosTable.getColumnModel().getColumn(1).setPreferredWidth(250);
+            contactosTable.getColumnModel().getColumn(2).setPreferredWidth(33);
+            contactosTable.setBackground(Color.WHITE);
 
-        this.panel.revalidate();
+            this.panel.revalidate();
 
-        int prop = (int) properties;
-        if (model.getCurrentUser() == null) {
-            Application.window.setSize(600,300);
-            Application.window.setTitle("CHAT");
-            loginPanel.setVisible(true);
-            Application.window.getRootPane().setDefaultButton(login);
-            bodyPanel.setVisible(false);
-        } else {
-            Application.window.setSize(700,500);
-            Application.window.setTitle(model.getCurrentUser().getNombre().toUpperCase());
-            loginPanel.setVisible(false);
-            bodyPanel.setVisible(true);
-            Application.window.getRootPane().setDefaultButton(post);
-            if ((prop & Model.CHAT) == Model.CHAT) {
-                this.messages.setText("");
-                String text = "";
-                for (Message m : model.getMessages()) {
-                    if (m.getSender().equals(model.getCurrentUser())) {
-                        text += ("Me: " + m.getMessage() + "\n");
-                    } else if (m.getSender().equals(model.getContactos().get(rowSelected))) {
-                        text += (m.getSender().getNombre() + ": " + m.getMessage() + "\n");
+            int prop = (int) properties;
+            if (model.getCurrentUser() == null) {
+                Application.window.setSize(600, 300);
+                Application.window.setTitle("CHAT");
+                loginPanel.setVisible(true);
+                Application.window.getRootPane().setDefaultButton(login);
+                bodyPanel.setVisible(false);
+            } else {
+                Application.window.setSize(700, 500);
+                Application.window.setTitle(model.getCurrentUser().getNombre().toUpperCase());
+                loginPanel.setVisible(false);
+                bodyPanel.setVisible(true);
+                Application.window.getRootPane().setDefaultButton(post);
+                if ((prop & Model.CHAT) == Model.CHAT) {
+                    this.messages.setText("");
+                    String text = "";
+                    for (Message m : model.getMessages()) {
+                        if (m.getSender().equals(model.getCurrentUser()) && rowSelected != -1) {
+                            text += ("Me: " + m.getMessage() + "\n");
+                        } else if (m.getSender().equals(model.getContactos().get(rowSelected))) {
+                            text += (m.getSender().getNombre() + ": " + m.getMessage() + "\n");
+                        }
                     }
+                    this.messages.setText(text);
                 }
-                this.messages.setText(text);
+                this.mensaje.setText("");
             }
-            this.mensaje.setText("");
+            panel.validate();
         }
-        panel.validate();
+        catch (Exception ignored) {
+        }
     }
 
     public void errorContactPane(String message) {
