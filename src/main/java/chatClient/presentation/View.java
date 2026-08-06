@@ -47,9 +47,91 @@ public class View implements Observer {
     // ----------------------------------------------------------------------------
 
     public View() {
+        // Initialize UI components programmatically because the .form isn't loaded at runtime
+        panel = new JPanel(new BorderLayout());
 
+        // Top area: logo and login
+        JPanel topPanel = new JPanel(new BorderLayout());
+
+        // loginPanel and loginPanel2 container
+        loginPanel2 = new JPanel(new BorderLayout());
+        loginPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        id = new JTextField(10);
+        clave = new JPasswordField(10);
+        login = new JButton("Login");
+        registrarButton = new JButton("Registrar");
+        finish = new JButton("Terminar");
+        loginPanel.add(new JLabel("Usuario"));
+        loginPanel.add(id);
+        loginPanel.add(new JLabel("Clave"));
+        loginPanel.add(clave);
+        loginPanel.add(login);
+        loginPanel.add(registrarButton);
+        loginPanel.add(finish);
+
+        logoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        try {
+            BufferedImage img = ImageIO.read(View.class.getResourceAsStream("/logo2.png"));
+            logoPanel.add(new JLabel(new ImageIcon(img)));
+        } catch (Exception ignored) {}
+
+        loginPanel2.add(loginPanel, BorderLayout.NORTH);
+        loginPanel2.add(logoPanel, BorderLayout.CENTER);
+
+        topPanel.add(loginPanel2, BorderLayout.NORTH);
+
+        // Body: contacts on left, chat on right
+        bodyPanel = new JPanel(new BorderLayout());
+
+        // Contacts area
+        JPanel contactsArea = new JPanel(new BorderLayout());
+        contactoField = new JTextField(10);
+        contactoButton = new JButton("Contacto");
+        JPanel contactInput = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        contactInput.add(contactoField);
+        contactInput.add(contactoButton);
+        contactosTable = new JTable();
+        JScrollPane contactosScroll = new JScrollPane(contactosTable);
+        contactsArea.add(contactInput, BorderLayout.NORTH);
+        contactsArea.add(contactosScroll, BorderLayout.CENTER);
+
+        // Chat area
+        JPanel chatArea = new JPanel(new BorderLayout());
+        messages = new JTextPane();
+        JScrollPane messagesScroll = new JScrollPane(messages);
+        JPanel sendPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        mensaje = new JTextField(25);
+        post = new JButton("Enviar");
+        sendPanel.add(mensaje);
+        sendPanel.add(post);
+        contactoLabel = new JLabel("");
+        logout = new JButton("↪");
+        JPanel topChat = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        topChat.add(contactoLabel);
+        topChat.add(logout);
+        chatArea.add(topChat, BorderLayout.NORTH);
+        chatArea.add(messagesScroll, BorderLayout.CENTER);
+        chatArea.add(sendPanel, BorderLayout.SOUTH);
+
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, contactsArea, chatArea);
+        split.setDividerLocation(220);
+        bodyPanel.add(split, BorderLayout.CENTER);
+
+        // Search area
+        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        buscarField = new JTextField(15);
+        buscarButton = new JButton("🔍");
+        searchPanel.add(buscarField);
+        searchPanel.add(buscarButton);
+
+        panel.add(topPanel, BorderLayout.NORTH);
+        panel.add(bodyPanel, BorderLayout.CENTER);
+        panel.add(searchPanel, BorderLayout.SOUTH);
+
+        // initial visibility
         loginPanel.setVisible(true);
-        Application.window.getRootPane().setDefaultButton(login);
+        loginPanel2.setVisible(true);
+        logoPanel.setVisible(true);
         bodyPanel.setVisible(false);
 
         DefaultCaret caret = (DefaultCaret) messages.getCaret();
@@ -162,6 +244,9 @@ public class View implements Observer {
                 try {
                     contactoField.setBackground(Color.white);
                     contactoField.setToolTipText("");
+                    if(model == null || model.getCurrentUser() == null) {
+                        throw new Exception("DEBE INICIAR SESION");
+                    }
                     if(Objects.equals(contactoField.getText(), "") || Objects.equals(contactoField.getText(), model.getCurrentUser().getNombre())) {
                         throw new Exception("USUARIO INVALIDO");
                     }
@@ -194,9 +279,12 @@ public class View implements Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    if(model == null || model.getCurrentUser() == null) throw new Exception("DEBE INICIAR SESION");
                     controller.contactSearch(buscarField.getText());
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(panel, "NO SE PUEDO ENCONTRAR", "ERROR", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(panel, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
