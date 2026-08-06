@@ -46,6 +46,11 @@ public class View implements Observer {
 
     // ----------------------------------------------------------------------------
 
+    private void showErrorMessage(String message) {
+        String safeMessage = (message == null || message.trim().isEmpty()) ? "OCURRIÓ UN ERROR" : message;
+        JOptionPane.showMessageDialog(panel, safeMessage, "ERROR", JOptionPane.ERROR_MESSAGE);
+    }
+
     public View() {
         // Initialize UI components programmatically because the .form isn't loaded at runtime
         panel = new JPanel(new BorderLayout());
@@ -154,7 +159,7 @@ public class View implements Observer {
                     clave.setBackground(Color.orange);
                     clave.setToolTipText("Clave Invalida");
                     messages.setText("");
-                    JOptionPane.showMessageDialog(panel, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                    showErrorMessage(ex.getMessage());
                 }
             }
         });
@@ -170,7 +175,7 @@ public class View implements Observer {
                     rowSelected = -1;
                 }
                 catch (Exception ex) {
-                    JOptionPane.showMessageDialog(panel, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                    showErrorMessage(ex.getMessage());
                 }
             }
         });
@@ -200,7 +205,7 @@ public class View implements Observer {
                     controller.post(text, receiver);
                 }
                 catch (Exception ex) {
-                    JOptionPane.showMessageDialog(panel, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                    showErrorMessage(ex.getMessage());
                 }
             }
         });
@@ -210,8 +215,8 @@ public class View implements Observer {
                 id.setBackground(Color.white);
                 clave.setBackground(Color.white);
                 try {
-                    if (Objects.equals(id.getText(), "") || Objects.equals(clave.getText(), "")) {
-                        throw new Exception();
+                    if (Objects.equals(id.getText().trim(), "") || Objects.equals(new String(clave.getPassword()).trim(), "")) {
+                        throw new Exception("DEBE INGRESAR USUARIO Y CLAVE");
                     }
 
                     JTextField nombre = new JTextField("");
@@ -222,7 +227,7 @@ public class View implements Observer {
                             controller.register(new User(id.getText(), new String(clave.getPassword()), nombre.getText()));
                             JOptionPane.showMessageDialog(panel, "USUARIO REGISTRADO");
                         } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(panel, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                            showErrorMessage(ex.getMessage());
                         }
                     }
                     else if (option != JOptionPane.OK_CANCEL_OPTION) {
@@ -234,7 +239,7 @@ public class View implements Observer {
                     id.setToolTipText("Ingrese un nombre valido");
                     clave.setBackground(Color.orange);
                     clave.setToolTipText("Ingrese una clave valida");
-                    JOptionPane.showMessageDialog(panel, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                    showErrorMessage(ex.getMessage());
                 }
             }
         });
@@ -258,7 +263,7 @@ public class View implements Observer {
                 catch (Exception ex) {
                     contactoField.setBackground(Color.orange);
                     contactoField.setToolTipText("Ingrese un Contacto Valido");
-                    JOptionPane.showMessageDialog(panel, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                    showErrorMessage(ex.getMessage());
                 }
                 contactoField.setText("");
             }
@@ -282,9 +287,9 @@ public class View implements Observer {
                     if(model == null || model.getCurrentUser() == null) throw new Exception("DEBE INICIAR SESION");
                     controller.contactSearch(buscarField.getText());
                 } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(panel, "NO SE PUEDO ENCONTRAR", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    showErrorMessage("NO SE PUDO ENCONTRAR");
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(panel, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                    showErrorMessage(ex.getMessage());
                 }
             }
         });

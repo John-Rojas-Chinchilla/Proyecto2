@@ -1,0 +1,22 @@
+# Java / Maven
+/target/
+**/target/
+*.class
+*.log
+
+# IDE files
+/.idea/
+/.vscode/
+*.iml
+
+# Local database / runtime config
+/dataBase.properties
+/src/main/resources/dataBase.properties
+
+# Local user data and generated assets
+UsersData*.xml
+UsersDataJohnRojas.xml
+UserDataJohnRojas.xml
+image*.png
+imageJohnRojas.png
+ImageJohnRojas.png
